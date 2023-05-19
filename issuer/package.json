@@ -11,6 +11,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@aries-framework/core": "0.3.3",
+    "@aries-framework/node": "0.3.3",
     "cors": "^2.8.5",
     "debug": "^4.3.4",
     "express": "^4.18.2",

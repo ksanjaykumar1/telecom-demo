@@ -22,13 +22,14 @@ import { ledgers } from '../utils/ledgers';
 const publicDidSeed = <string>process.env.PUBLIC_DID_SEED;
 const mediatorInvitationUrl = <string>process.env.MEDIATOR_URL;
 const label = <string>process.env.LABEL;
+const env = <string>process.env.ENV;
 // const agentPort = <number>(<unknown>process.env.AGENT_PORT);
 
 let invitationUrl: string;
 let agent: Agent;
 
 const agentConfig: InitConfig = {
-  logger: new ConsoleLogger(LogLevel.trace),
+  logger: new ConsoleLogger(env === 'dev' ? LogLevel.trace : LogLevel.info),
   label: label + utils.uuid(),
   autoAcceptConnections: true,
   autoAcceptProofs: AutoAcceptProof.Always,

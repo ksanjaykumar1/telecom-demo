@@ -22,7 +22,7 @@ import { ledgers } from '../utils/ledgers';
 const publicDidSeed = <string>process.env.PUBLIC_DID_SEED;
 const mediatorInvitationUrl = <string>process.env.MEDIATOR_URL;
 const label = <string>process.env.LABEL;
-const agentPort = <number>(<unknown>process.env.AGENT_PORT);
+// const agentPort = <number>(<unknown>process.env.AGENT_PORT);
 
 const agentConfig: InitConfig = {
   logger: new ConsoleLogger(LogLevel.trace),

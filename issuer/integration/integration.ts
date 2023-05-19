@@ -24,6 +24,9 @@ const mediatorInvitationUrl = <string>process.env.MEDIATOR_URL;
 const label = <string>process.env.LABEL;
 // const agentPort = <number>(<unknown>process.env.AGENT_PORT);
 
+let invitationUrl: string;
+let agent: Agent;
+
 const agentConfig: InitConfig = {
   logger: new ConsoleLogger(LogLevel.trace),
   label: label + utils.uuid(),
@@ -38,8 +41,6 @@ const agentConfig: InitConfig = {
     key: 'demoagentissuer00000000000000000',
   },
 };
-
-let invitationUrl;
 
 async function initializeAgent(agentConfig: InitConfig) {
   try {
@@ -66,13 +67,15 @@ async function initializeAgent(agentConfig: InitConfig) {
 }
 
 export async function run() {
-  const agent = await initializeAgent(agentConfig);
+  agent = await initializeAgent(agentConfig);
   try {
     const outOfBandRecord = await agent.oob.createInvitation();
-    const invitationUrl = outOfBandRecord.outOfBandInvitation.toUrl({
+    invitationUrl = outOfBandRecord.outOfBandInvitation.toUrl({
       domain: 'https://example.org',
     });
     console.log(`Invitation URL ${invitationUrl}`);
     qrcode.generate(invitationUrl, { small: true });
   } catch (error) {}
 }
+
+export { agent, invitationUrl };

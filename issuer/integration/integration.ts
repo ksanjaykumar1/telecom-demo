@@ -1,5 +1,6 @@
 import { config } from 'dotenv';
 config();
+import * as fs from 'fs';
 
 import {
   Agent,
@@ -20,6 +21,7 @@ import qrcode from 'qrcode-terminal';
 import { ledgers } from '../utils/ledgers';
 
 const publicDidSeed = <string>process.env.PUBLIC_DID_SEED;
+const schemaName = <string>process.env.SCHEMA_Name;
 const mediatorInvitationUrl = <string>process.env.MEDIATOR_URL;
 const label = <string>process.env.LABEL;
 const env = <string>process.env.ENV;
@@ -79,4 +81,60 @@ export async function run() {
   } catch (error) {}
 }
 
-export { agent, invitationUrl };
+const registerSchema = async (
+  attributes: string[],
+  name: string,
+  version: string
+) => {
+  console.log('registerSchema');
+  try {
+    const schema = await agent.ledger.registerSchema({
+      attributes,
+      name,
+      version,
+    });
+    console.log('schema');
+    console.log(schema);
+    fs.writeFileSync('./data/schema.json', JSON.stringify(schema));
+    return schema;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const registerCredentialDefinition = async (schema: any) => {
+  try {
+    const credentialDefinition =
+      await agent.ledger.registerCredentialDefinition({
+        schema,
+        supportRevocation: false,
+        tag: 'latest',
+      });
+    fs.writeFileSync(
+      './data/credentialDefinition.json',
+      JSON.stringify(credentialDefinition)
+    );
+
+    return credentialDefinition;
+  } catch (error) {}
+};
+
+const registerInitialScehmaAndCredDef = async () => {
+  console.log('called registerInitialScehmaAndCredDef');
+
+  const schema = await registerSchema(
+    ['name', 'age'],
+    schemaName + utils.uuid(),
+    '1.0'
+  );
+  console.log(schema);
+  const credentialDefinition = await registerCredentialDefinition(schema);
+};
+
+export {
+  agent,
+  invitationUrl,
+  registerInitialScehmaAndCredDef,
+  registerSchema,
+  registerCredentialDefinition,
+};

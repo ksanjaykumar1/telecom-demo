@@ -158,8 +158,8 @@ const connectionListner = (outOfBandRecord: OutOfBandRecord) => {
         );
 
         await sendMessage(
-          outOfBandRecord.id,
-          `Hello you are being connected us with connection record ${outOfBandRecord.id}`
+          payload.connectionRecord.id,
+          `Hello you are being connected us with connection record ${payload.connectionRecord.id}`
         );
       }
     }

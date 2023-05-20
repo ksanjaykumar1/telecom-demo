@@ -3,19 +3,29 @@ config();
 import * as fs from 'fs';
 
 import {
-  Agent,
-  AutoAcceptCredential,
-  AutoAcceptProof,
-  ConnectionEventTypes,
-  ConnectionStateChangedEvent,
-  ConsoleLogger,
-  DidExchangeState,
-  HttpOutboundTransport,
+  CredentialsModule,
+  DidsModule,
   InitConfig,
-  LogLevel,
+  V2CredentialProtocol,
+  MediationRecipientModule,
+  ConnectionsModule,
+  KeyDidResolver,
+  AutoAcceptCredential,
+  ProofsModule,
+  AutoAcceptProof,
+  V2ProofProtocol,
+  Agent,
   OutOfBandRecord,
-  WsOutboundTransport,
+  LogLevel,
   utils,
+  ConsoleLogger,
+  HttpOutboundTransport,
+  WsOutboundTransport,
+  ConnectionStateChangedEvent,
+  ConnectionEventTypes,
+  DidExchangeState,
+  KeyType,
+  TypedArrayEncoder,
 } from '@aries-framework/core';
 
 import { HttpInboundTransport, agentDependencies } from '@aries-framework/node';
@@ -23,8 +33,29 @@ import { HttpInboundTransport, agentDependencies } from '@aries-framework/node';
 import qrcode from 'qrcode-terminal';
 
 import { ledgers } from '../utils/ledgers';
+import {
+  AnonCredsCredentialFormatService,
+  AnonCredsModule,
+  AnonCredsProofFormatService,
+  LegacyIndyCredentialFormatService,
+  LegacyIndyProofFormatService,
+  V1CredentialProtocol,
+  V1ProofProtocol,
+} from '@aries-framework/anoncreds';
+import { AskarModule } from '@aries-framework/askar';
+import {
+  IndyVdrAnonCredsRegistry,
+  IndyVdrIndyDidResolver,
+  IndyVdrModule,
+} from '@aries-framework/indy-vdr';
+import { AnonCredsRsModule } from '@aries-framework/anoncreds-rs';
+
+import { ariesAskar } from '@hyperledger/aries-askar-nodejs';
+import { anoncreds } from '@hyperledger/anoncreds-nodejs';
+import { indyVdr } from '@hyperledger/indy-vdr-nodejs';
 
 const publicDidSeed = <string>process.env.PUBLIC_DID_SEED;
+const issuerId = <string>process.env.ISSUER_DID;
 const schemaName = <string>process.env.SCHEMA_Name;
 const mediatorInvitationUrl = <string>process.env.MEDIATOR_URL;
 const label = <string>process.env.LABEL;
@@ -36,27 +67,84 @@ let agent: Agent;
 let initialOutOfBandRecord: OutOfBandRecord;
 
 const agentConfig: InitConfig = {
-  logger: new ConsoleLogger(env === 'dev' ? LogLevel.trace : LogLevel.info),
+  // logger: new ConsoleLogger(env === 'dev' ? LogLevel.trace : LogLevel.info),
+  logger: new ConsoleLogger(LogLevel.info),
   label: label + utils.uuid(),
-  autoAcceptConnections: true,
-  autoAcceptProofs: AutoAcceptProof.Always,
-  autoAcceptCredentials: AutoAcceptCredential.ContentApproved,
-  mediatorConnectionsInvite: mediatorInvitationUrl,
-  indyLedgers: ledgers,
-  publicDidSeed,
-  autoUpdateStorageOnStartup: true,
   walletConfig: {
     id: label,
     key: 'demoagentissuer00000000000000000',
-    // storage: { type: 'sqlite' },
   },
+  // autoAcceptConnections: true,
+  // autoAcceptProofs: AutoAcceptProof.Always,
+  // autoAcceptCredentials: AutoAcceptCredential.ContentApproved,
+  // mediatorConnectionsInvite: mediatorInvitationUrl,
+  // indyLedgers: ledgers,
+  // publicDidSeed,
+  // autoUpdateStorageOnStartup: true,
 };
 
 async function initializeAgent(agentConfig: InitConfig) {
   try {
+    const legacyIndyCredentialFormatService =
+      new LegacyIndyCredentialFormatService();
+    const legacyIndyProofFormatService = new LegacyIndyProofFormatService();
+
     const agent = new Agent({
       config: agentConfig,
       dependencies: agentDependencies,
+      modules: {
+        connections: new ConnectionsModule({
+          autoAcceptConnections: true,
+        }),
+        mediationRecipient: new MediationRecipientModule({
+          mediatorInvitationUrl,
+        }),
+        credentials: new CredentialsModule({
+          autoAcceptCredentials: AutoAcceptCredential.ContentApproved,
+          credentialProtocols: [
+            new V1CredentialProtocol({
+              indyCredentialFormat: legacyIndyCredentialFormatService,
+            }),
+            new V2CredentialProtocol({
+              credentialFormats: [
+                legacyIndyCredentialFormatService,
+                new AnonCredsCredentialFormatService(),
+              ],
+            }),
+          ],
+        }),
+        proofs: new ProofsModule({
+          autoAcceptProofs: AutoAcceptProof.ContentApproved,
+          proofProtocols: [
+            new V1ProofProtocol({
+              indyProofFormat: legacyIndyProofFormatService,
+            }),
+            new V2ProofProtocol({
+              proofFormats: [
+                legacyIndyProofFormatService,
+                new AnonCredsProofFormatService(),
+              ],
+            }),
+          ],
+        }),
+        anoncreds: new AnonCredsModule({
+          registries: [new IndyVdrAnonCredsRegistry()],
+        }),
+        anoncredsRs: new AnonCredsRsModule({
+          anoncreds,
+        }),
+        indyVdr: new IndyVdrModule({
+          indyVdr,
+          networks: [ledgers],
+        }),
+        dids: new DidsModule({
+          resolvers: [new IndyVdrIndyDidResolver(), new KeyDidResolver()],
+          registrars: [],
+        }),
+        askar: new AskarModule({
+          ariesAskar,
+        }),
+      },
     });
     // Registering the required in- and outbound transports
     agent.registerOutboundTransport(new HttpOutboundTransport());
@@ -88,6 +176,21 @@ export async function run() {
   } catch (error) {}
 }
 
+const importDID = async () => {
+  console.log('issuerId');
+  console.log(issuerId);
+  agent.dids.import({
+    did: issuerId,
+    overwrite: true,
+    privateKeys: [
+      {
+        keyType: KeyType.Ed25519,
+        privateKey: TypedArrayEncoder.fromString(publicDidSeed),
+      },
+    ],
+  });
+};
+
 const registerSchema = async (
   attributes: string[],
   name: string,
@@ -95,15 +198,34 @@ const registerSchema = async (
 ) => {
   console.log('registerSchema');
   try {
-    const schema = await agent.ledger.registerSchema({
-      attributes,
-      name,
-      version,
+    if (!issuerId) {
+      throw new Error('Missing anoncred issuerId');
+    }
+
+    const schemaTemplate = {
+      name: name + utils.uuid(),
+      version: version,
+      attrNames: attributes,
+      issuerId: issuerId,
+    };
+    const { schemaState } = await agent.modules.anoncreds.registerSchema({
+      schema: schemaTemplate,
+      options: {
+        endorserMode: 'internal',
+        endorserDid: issuerId,
+      },
     });
-    console.log('schema');
-    console.log(schema);
-    fs.writeFileSync('./data/schema.json', JSON.stringify(schema));
-    return schema;
+    console.log(schemaState);
+
+    if (schemaState.state !== 'finished') {
+      throw new Error(
+        `Error registering schema: ${
+          schemaState.state === 'failed' ? schemaState.reason : 'Not Finished'
+        }`
+      );
+    }
+    fs.writeFileSync('./data/schema.json', JSON.stringify(schemaState));
+    return schemaState;
   } catch (error) {
     console.log(error);
   }
@@ -111,24 +233,37 @@ const registerSchema = async (
 
 const registerCredentialDefinition = async (schema: any) => {
   try {
-    const credentialDefinition =
-      await agent.ledger.registerCredentialDefinition({
-        schema,
-        supportRevocation: false,
-        tag: 'latest',
+    const { credentialDefinitionState } =
+      await agent.modules.anoncreds.registerCredentialDefinition({
+        credentialDefinition: {
+          schemaId: schema.schemaId,
+          issuerId: issuerId,
+          tag: 'latest',
+        },
+        options: {},
       });
+
+    if (credentialDefinitionState.state !== 'finished') {
+      throw new Error(
+        `Error registering credential definition: ${
+          credentialDefinitionState.state === 'failed'
+            ? credentialDefinitionState.reason
+            : 'Not Finished'
+        }}`
+      );
+    }
     fs.writeFileSync(
       './data/credentialDefinition.json',
-      JSON.stringify(credentialDefinition)
+      JSON.stringify(credentialDefinitionState)
     );
 
-    return credentialDefinition;
-  } catch (error) {}
+    return credentialDefinitionState;
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 const registerInitialScehmaAndCredDef = async () => {
-  console.log('called registerInitialScehmaAndCredDef');
-
   const schema = await registerSchema(
     ['name', 'age'],
     schemaName + utils.uuid(),
@@ -156,10 +291,10 @@ const connectionListner = (outOfBandRecord: OutOfBandRecord) => {
         console.log(
           `Connection for out-of-band id ${outOfBandRecord.id} completed`
         );
-
+        // await agent.connections.returnWhenIsConnected(payload.connectionRecord.id)
         await sendMessage(
-          outOfBandRecord.id,
-          `Hello you are being connected us with connection record ${outOfBandRecord.id}`
+          payload.connectionRecord.id,
+          `Hello you are being connected us with connection record ${payload.connectionRecord.id}`
         );
       }
     }
@@ -181,4 +316,5 @@ export {
   initialOutOfBandRecord,
   connectionListner,
   sendMessage,
+  importDID,
 };

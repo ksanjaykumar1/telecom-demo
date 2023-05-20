@@ -7,6 +7,12 @@ import cors from 'cors';
 import { CommonRoutesConfig } from './routes/common.routes.config';
 import { IssueCredentialRoute } from './routes/issueCredential.routes.config';
 import debug from 'debug';
+import {
+  connectionListner,
+  initialOutOfBandRecord,
+  registerInitialScehmaAndCredDef,
+  run,
+} from './integration/integration';
 
 const app: express.Application = express();
 const server: http.Server = http.createServer(app);
@@ -22,16 +28,16 @@ app.use(cors());
 // here we are preparing the expressWinston logging middleware configuration,
 // which will automatically log all HTTP requests handled by Express.js
 const loggerOptions: expressWinston.LoggerOptions = {
-    transports: [new winston.transports.Console()],
-    format: winston.format.combine(
-        winston.format.json(),
-        winston.format.prettyPrint(),
-        winston.format.colorize({ all: true })
-    ),
+  transports: [new winston.transports.Console()],
+  format: winston.format.combine(
+    winston.format.json(),
+    winston.format.prettyPrint(),
+    winston.format.colorize({ all: true })
+  ),
 };
 
 if (!process.env.DEBUG) {
-    loggerOptions.meta = false; // when not debugging, log requests as one-liners
+  loggerOptions.meta = false; // when not debugging, log requests as one-liners
 }
 
 // initialize the logger with the above configuration
@@ -44,14 +50,24 @@ routes.push(new IssueCredentialRoute(app));
 // this is a simple route to make sure everything is working properly
 const runningMessage = `Server running at http://localhost:${port}`;
 app.get('/', (req: express.Request, res: express.Response) => {
-    res.status(200).send(runningMessage)
+  res.status(200).send(runningMessage);
 });
 
-server.listen(port, () => {
-    routes.forEach((route: CommonRoutesConfig) => {
+const start = async () => {
+  try {
+    await run();
+    await connectionListner(initialOutOfBandRecord);
+    console.log('before registering schema and cred def');
+    await registerInitialScehmaAndCredDef();
+    server.listen(port, () => {
+      routes.forEach((route: CommonRoutesConfig) => {
         debugLog(`Routes configured for ${route.getName()}`);
+      });
+      // our only exception to avoiding console.log(), because we
+      // always want to know when the server is done starting up
+      console.log(runningMessage);
     });
-    // our only exception to avoiding console.log(), because we
-    // always want to know when the server is done starting up
-    console.log(runningMessage);
-});
+  } catch (error) {}
+};
+
+start();

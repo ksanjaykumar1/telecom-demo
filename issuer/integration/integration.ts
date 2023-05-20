@@ -6,10 +6,14 @@ import {
   Agent,
   AutoAcceptCredential,
   AutoAcceptProof,
+  ConnectionEventTypes,
+  ConnectionStateChangedEvent,
   ConsoleLogger,
+  DidExchangeState,
   HttpOutboundTransport,
   InitConfig,
   LogLevel,
+  OutOfBandRecord,
   WsOutboundTransport,
   utils,
 } from '@aries-framework/core';
@@ -29,6 +33,7 @@ const env = <string>process.env.ENV;
 
 let invitationUrl: string;
 let agent: Agent;
+let initialOutOfBandRecord: OutOfBandRecord;
 
 const agentConfig: InitConfig = {
   logger: new ConsoleLogger(env === 'dev' ? LogLevel.trace : LogLevel.info),
@@ -39,9 +44,11 @@ const agentConfig: InitConfig = {
   mediatorConnectionsInvite: mediatorInvitationUrl,
   indyLedgers: ledgers,
   publicDidSeed,
+  autoUpdateStorageOnStartup: true,
   walletConfig: {
     id: label,
     key: 'demoagentissuer00000000000000000',
+    // storage: { type: 'sqlite' },
   },
 };
 
@@ -72,8 +79,8 @@ async function initializeAgent(agentConfig: InitConfig) {
 export async function run() {
   agent = await initializeAgent(agentConfig);
   try {
-    const outOfBandRecord = await agent.oob.createInvitation();
-    invitationUrl = outOfBandRecord.outOfBandInvitation.toUrl({
+    initialOutOfBandRecord = await agent.oob.createInvitation();
+    invitationUrl = initialOutOfBandRecord.outOfBandInvitation.toUrl({
       domain: 'https://example.org',
     });
     console.log(`Invitation URL ${invitationUrl}`);
@@ -131,10 +138,47 @@ const registerInitialScehmaAndCredDef = async () => {
   const credentialDefinition = await registerCredentialDefinition(schema);
 };
 
+// send basic message
+
+const sendMessage = async (connectionRecordId: string, message: string) => {
+  await agent.basicMessages.sendMessage(connectionRecordId, message);
+};
+
+// Listners
+
+const connectionListner = (outOfBandRecord: OutOfBandRecord) => {
+  agent.events.on<ConnectionStateChangedEvent>(
+    ConnectionEventTypes.ConnectionStateChanged,
+    async ({ payload }) => {
+      if (payload.connectionRecord.outOfBandId !== outOfBandRecord.id) return;
+      if (payload.connectionRecord.state === DidExchangeState.Completed) {
+        // the connection is now ready for usage in other protocols!
+        console.log(
+          `Connection for out-of-band id ${outOfBandRecord.id} completed`
+        );
+
+        await sendMessage(
+          outOfBandRecord.id,
+          `Hello you are being connected us with connection record ${outOfBandRecord.id}`
+        );
+      }
+    }
+  );
+};
+
+// connection Listner
+
+// Credential Handler Listner i.e
+
+// Proof Handler Listner
+
 export {
   agent,
   invitationUrl,
   registerInitialScehmaAndCredDef,
   registerSchema,
   registerCredentialDefinition,
+  initialOutOfBandRecord,
+  connectionListner,
+  sendMessage,
 };

@@ -1,2 +1,4 @@
-node_modules
-.env
+issuer/node_modules
+issuer/.env
+issuer/dist/
+issuer/data

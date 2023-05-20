@@ -9,6 +9,7 @@ import { IssueCredentialRoute } from './routes/issueCredential.routes.config';
 import debug from 'debug';
 import {
   connectionListner,
+  importDID,
   initialOutOfBandRecord,
   registerInitialScehmaAndCredDef,
   run,
@@ -56,6 +57,7 @@ app.get('/', (req: express.Request, res: express.Response) => {
 const start = async () => {
   try {
     await run();
+    await importDID();
     await connectionListner(initialOutOfBandRecord);
     console.log('before registering schema and cred def');
     await registerInitialScehmaAndCredDef();

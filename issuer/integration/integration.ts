@@ -7,6 +7,7 @@ import {
   AutoAcceptCredential,
   AutoAcceptProof,
   ConnectionEventTypes,
+  ConnectionRecord,
   ConnectionStateChangedEvent,
   ConsoleLogger,
   DidExchangeState,
@@ -34,6 +35,7 @@ const env = <string>process.env.ENV;
 let invitationUrl: string;
 let agent: Agent;
 let initialOutOfBandRecord: OutOfBandRecord;
+let connectedConnectionRecord: ConnectionRecord;
 
 const agentConfig: InitConfig = {
   logger: new ConsoleLogger(env === 'dev' ? LogLevel.trace : LogLevel.info),
@@ -156,7 +158,7 @@ const connectionListner = (outOfBandRecord: OutOfBandRecord) => {
         console.log(
           `Connection for out-of-band id ${outOfBandRecord.id} completed`
         );
-
+        connectedConnectionRecord = payload.connectionRecord;
         await sendMessage(
           payload.connectionRecord.id,
           `Hello you are being connected us with connection record ${payload.connectionRecord.id}`
@@ -181,4 +183,5 @@ export {
   initialOutOfBandRecord,
   connectionListner,
   sendMessage,
+  connectedConnectionRecord,
 };

@@ -21,6 +21,8 @@ import connections from './routes/connections';
 import schema from './routes/schema';
 import credDef from './routes/credDef';
 import issueCredentialV1 from './routes/issueCredentials-v1';
+import outOfBand from './routes/outOfBand';
+
 import notFound from './middleware/not-found';
 import { removeData } from './utils/file';
 import errorHandler from './middleware/errorHandler';
@@ -57,6 +59,7 @@ app.use('/api/v1/connections', connections);
 app.use('/api/v1/schemas', schema);
 app.use('/api/v1/credential-definitions', credDef);
 app.use('/api/v1/issue-credential', issueCredentialV1);
+app.use('/api/v1/out-of-band', outOfBand);
 
 // this is a simple route to make sure everything is working properly
 const runningMessage = `Server running at http://localhost:${port}`;

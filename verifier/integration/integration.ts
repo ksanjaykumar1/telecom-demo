@@ -4,6 +4,7 @@ import * as fs from 'fs';
 
 import {
   Agent,
+  AttributeFilter,
   AutoAcceptCredential,
   AutoAcceptProof,
   ConnectionEventTypes,
@@ -18,6 +19,7 @@ import {
   InitConfig,
   LogLevel,
   OutOfBandRecord,
+  ProofAttributeInfo,
   ProofEventTypes,
   ProofState,
   ProofStateChangedEvent,
@@ -186,6 +188,33 @@ const issueCredentialV1 = async (
   }
 };
 
+const sendProofRequest = async (
+  credentialDefinitionId: string,
+  connectionId: string
+) => {
+  const proofAttribute = {
+    name: new ProofAttributeInfo({
+      name: 'proof-request',
+      restrictions: [
+        new AttributeFilter({
+          credentialDefinitionId: credentialDefinitionId,
+        }),
+      ],
+    }),
+  };
+  const proofRequest = await agent.proofs.requestProof({
+    protocolVersion: 'v1',
+    connectionId,
+    proofFormats: {
+      indy: {
+        name: 'proof-request',
+        version: '1.0',
+        requestedAttributes: proofAttribute,
+      },
+    },
+  });
+  return proofRequest;
+};
 
 // Listners
 
@@ -222,4 +251,5 @@ export {
   sendMessage,
   connectedConnectionRecord,
   issueCredentialV1,
+  sendProofRequest,
 };

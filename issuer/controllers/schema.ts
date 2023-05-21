@@ -1,13 +1,14 @@
 import express from 'express';
 import { agent, connectedConnectionRecord } from '../integration/integration';
 import { sendMessage } from '../integration/integration';
-import initialSchema from '../data/schema.json';
 import { utils } from '@aries-framework/core';
 import * as fs from 'fs';
 import { Aries, NotFound } from '../errors';
 
 const getSchemaById = async (req: express.Request, res: express.Response) => {
   const { schema_id } = req.body;
+  const initialSchemaBuffer = fs.readFileSync(`./data/schema.json`, 'utf8');
+  const initialSchema = JSON.parse(initialSchemaBuffer);
 
   const schemaId = schema_id || initialSchema.id;
   try {

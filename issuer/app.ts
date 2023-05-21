@@ -1,23 +1,31 @@
+import 'express-async-errors';
+import { config } from 'dotenv';
+config();
 import express from 'express';
 import * as http from 'http';
 
 import * as winston from 'winston';
 import * as expressWinston from 'express-winston';
 import cors from 'cors';
-import { CommonRoutesConfig } from './routes/common.routes.config';
-import { IssueCredentialRoute } from './routes/issueCredential.routes.config';
+
 import debug from 'debug';
 import {
+  agent,
   connectionListner,
   initialOutOfBandRecord,
   registerInitialScehmaAndCredDef,
   run,
 } from './integration/integration';
+import connections from './routes/connections';
+import schema from './routes/schema';
+import notFound from './middleware/not-found';
+import { removeData } from './utils/file';
+import errorHandler from './middleware/errorHandler';
 
+let provision = <boolean | undefined>process.env.PROVISION;
 const app: express.Application = express();
 const server: http.Server = http.createServer(app);
 const port = 3000;
-const routes: Array<CommonRoutesConfig> = [];
 const debugLog: debug.IDebugger = debug('app');
 
 app.use(express.json());
@@ -42,10 +50,8 @@ if (!process.env.DEBUG) {
 
 // initialize the logger with the above configuration
 app.use(expressWinston.logger(loggerOptions));
-
-// here we are adding the UserRoutes to our array,
-// after sending the Express.js application object to have the routes added to our app!
-routes.push(new IssueCredentialRoute(app));
+app.use('/api/v1/connections', connections);
+app.use('/api/v1/schemas', schema);
 
 // this is a simple route to make sure everything is working properly
 const runningMessage = `Server running at http://localhost:${port}`;
@@ -53,21 +59,30 @@ app.get('/', (req: express.Request, res: express.Response) => {
   res.status(200).send(runningMessage);
 });
 
+app.use(notFound);
+app.use(errorHandler);
+
 const start = async () => {
   try {
+    // "provision" is intended to be used one time per agent deployment
+    // to establish its secure storage database and the required ledger objects.
+    // if (!agent.wallet.isProvisioned) {
+    // to clean local storage
+    removeData();
     await run();
     await connectionListner(initialOutOfBandRecord);
     console.log('before registering schema and cred def');
     await registerInitialScehmaAndCredDef();
+    // }
+
     server.listen(port, () => {
-      routes.forEach((route: CommonRoutesConfig) => {
-        debugLog(`Routes configured for ${route.getName()}`);
-      });
       // our only exception to avoiding console.log(), because we
       // always want to know when the server is done starting up
       console.log(runningMessage);
     });
-  } catch (error) {}
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 start();

@@ -1,6 +1,7 @@
 import 'express-async-errors';
 import { config } from 'dotenv';
 config();
+import qrcode from 'qrcode-terminal';
 import express from 'express';
 import * as http from 'http';
 
@@ -19,6 +20,7 @@ import {
 import connections from './routes/connections';
 import schema from './routes/schema';
 import credDef from './routes/credDef';
+import issueCredentialV1 from './routes/issueCredentials-v1';
 import notFound from './middleware/not-found';
 import { removeData } from './utils/file';
 import errorHandler from './middleware/errorHandler';
@@ -54,6 +56,7 @@ app.use(expressWinston.logger(loggerOptions));
 app.use('/api/v1/connections', connections);
 app.use('/api/v1/schemas', schema);
 app.use('/api/v1/credential-definitions', credDef);
+app.use('/api/v1/issue-credential', issueCredentialV1);
 
 // this is a simple route to make sure everything is working properly
 const runningMessage = `Server running at http://localhost:${port}`;
@@ -81,6 +84,11 @@ const start = async () => {
       // our only exception to avoiding console.log(), because we
       // always want to know when the server is done starting up
       console.log(runningMessage);
+      // const invitationUrl = initialOutOfBandRecord.outOfBandInvitation.toUrl({
+      //   domain: 'https://example.org',
+      // });
+      // console.log(`Invitation URL ${invitationUrl}`);
+      // qrcode.generate(invitationUrl, { small: true });
     });
   } catch (error) {
     console.log(error);

@@ -2,3 +2,8 @@ issuer/node_modules
 issuer/.env
 issuer/dist/
 issuer/data
+
+verifier/node_modules
+verifier/.env
+verifier/dist/
+verifier/data

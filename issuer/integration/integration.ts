@@ -10,11 +10,18 @@ import {
   ConnectionRecord,
   ConnectionStateChangedEvent,
   ConsoleLogger,
+  CredentialEventTypes,
+  CredentialState,
+  CredentialStateChangedEvent,
   DidExchangeState,
   HttpOutboundTransport,
   InitConfig,
   LogLevel,
   OutOfBandRecord,
+  ProofEventTypes,
+  ProofState,
+  ProofStateChangedEvent,
+  V1CredentialPreview,
   WsOutboundTransport,
   utils,
 } from '@aries-framework/core';
@@ -24,9 +31,10 @@ import { HttpInboundTransport, agentDependencies } from '@aries-framework/node';
 import qrcode from 'qrcode-terminal';
 
 import { ledgers } from '../utils/ledgers';
+import { Aries } from '../errors';
 
 const publicDidSeed = <string>process.env.PUBLIC_DID_SEED;
-const schemaName = <string>process.env.SCHEMA_Name;
+const schemaName = <string>process.env.SCHEMA_NAME;
 const mediatorInvitationUrl = <string>process.env.MEDIATOR_URL;
 const label = <string>process.env.LABEL;
 const env = <string>process.env.ENV;
@@ -67,10 +75,8 @@ async function initializeAgent(agentConfig: InitConfig) {
     console.log('Initializing agent...');
     await agent.initialize();
     console.log('Initializing agent... Success');
-
-    console.log('Connecting to ledger...');
-    // await agent.ledger.connectToPools();
-    console.log('Connecting to ledger... Success');
+    // To clear all the old records in the wallet
+    // await agent.wallet.delete();
     return agent;
   } catch (error) {
     console.log(error);
@@ -104,6 +110,12 @@ const registerSchema = async (
     });
     console.log('schema');
     console.log(schema);
+
+    // create a folder if doesn't exits to store data
+    const dir = './data';
+    if (!fs.existsSync(dir)) {
+      fs.mkdirSync(dir);
+    }
     fs.writeFileSync('./data/schema.json', JSON.stringify(schema));
     return schema;
   } catch (error) {
@@ -146,7 +158,39 @@ const sendMessage = async (connectionRecordId: string, message: string) => {
   await agent.basicMessages.sendMessage(connectionRecordId, message);
 };
 
+const issueCredentialV1 = async (
+  credentialDefinitionId: string,
+  connectionId: string,
+  attributes: any
+) => {
+  let credentialPreview;
+  try {
+    credentialPreview = await V1CredentialPreview.fromRecord(attributes);
+    console.log(credentialPreview);
+  } catch (error) {
+    throw new Aries(`credentialPreview : ${error}`);
+  }
+  try {
+    const offerCredential = await agent.credentials.offerCredential({
+      protocolVersion: 'v1',
+      connectionId,
+      credentialFormats: {
+        indy: {
+          credentialDefinitionId,
+          attributes: credentialPreview.attributes,
+        },
+      },
+    });
+    return offerCredential;
+  } catch (error) {
+    throw new Aries(`issuance : ${error}`);
+  }
+};
+
+
 // Listners
+
+// connection Listner
 
 const connectionListner = (outOfBandRecord: OutOfBandRecord) => {
   agent.events.on<ConnectionStateChangedEvent>(
@@ -168,12 +212,6 @@ const connectionListner = (outOfBandRecord: OutOfBandRecord) => {
   );
 };
 
-// connection Listner
-
-// Credential Handler Listner i.e
-
-// Proof Handler Listner
-
 export {
   agent,
   invitationUrl,
@@ -184,4 +222,5 @@ export {
   connectionListner,
   sendMessage,
   connectedConnectionRecord,
+  issueCredentialV1,
 };

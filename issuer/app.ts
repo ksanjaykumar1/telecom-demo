@@ -18,6 +18,7 @@ import {
 } from './integration/integration';
 import connections from './routes/connections';
 import schema from './routes/schema';
+import credDef from './routes/credDef';
 import notFound from './middleware/not-found';
 import { removeData } from './utils/file';
 import errorHandler from './middleware/errorHandler';
@@ -52,6 +53,7 @@ if (!process.env.DEBUG) {
 app.use(expressWinston.logger(loggerOptions));
 app.use('/api/v1/connections', connections);
 app.use('/api/v1/schemas', schema);
+app.use('/api/v1/credential-definitions', credDef);
 
 // this is a simple route to make sure everything is working properly
 const runningMessage = `Server running at http://localhost:${port}`;

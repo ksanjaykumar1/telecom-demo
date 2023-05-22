@@ -127,6 +127,8 @@ The holder agent as setup a listner and it listen to the credential offer it rec
 
 ![Screenshot from 2023-05-22 21-08-30](https://github.com/ksanjaykumar1/telecom-demo/assets/72605368/3489368c-7a25-4cc7-a27f-20b022a8e651)
 
+![Screenshot from 2023-05-22 21-17-07](https://github.com/ksanjaykumar1/telecom-demo/assets/72605368/dafbf544-5686-4481-b7f7-4abd07fab849)
+
 
 ![Screenshot from 2023-05-22 21-13-52](https://github.com/ksanjaykumar1/telecom-demo/assets/72605368/aa9962f5-e50f-41c8-8d0d-a88c978eed46)
 

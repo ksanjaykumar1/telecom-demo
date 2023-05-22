@@ -33,5 +33,11 @@ docker logs issuer -f
 1. Docker
 2. Docker Compose V2
 
+> NOTE: Internet connection is a must because application interacts with online BCovrin Test Indy network and online mediator provided by Animo.
 
 
+## Process Flow
+
+There are two way to perfrom the operations.
+1. Use the all three agents in the project.
+2. **Use your mobile digital wallet as a holder (USE BC WALLET by British Columbia, the app is available in Play Store)** to perform the interaction. All three agents use online mediator which makes it possible to communicate outside the local system.  

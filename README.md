@@ -14,7 +14,9 @@ The standard process of getting a mobile sim card in India is visiting a telecom
 
 ## How to Run the Project
 
-> NOTE: Use docker version V2. I am using  Docker Compose version v2.12.2. The network fails when run with docker-compose version 1.25.5
+> NOTE: Use docker version V2. I am using  Docker Compose version v2.12.2. The network fails when run with docker-compose version 1.25.5.
+
+Create .env file from .env-sample in each of the issuer, holder and verifer folder. And run the following command from the root directory of this repo. 
 ```
 docker compose up -d --build 
 ```

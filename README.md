@@ -79,6 +79,19 @@ These numbering are seperate from the above project flow.
 
 ## 1.Agent Setup
 
+At the start each of the agent are intialized and are connected to ledger and mediator.
+
+To check if a particular agent is connected to the mediator call the "get all connections" API under the folder collection "connections" that is under each respective agent folder name in the Postman collection.
+
+![mediator](https://github.com/ksanjaykumar1/telecom-demo/assets/72605368/db9c70f9-68b7-4f41-8ec8-857ffc017787)
+The request was sent to issuer agent and it says the connection status is completed with Animo Mediator.
+
+At the start, the issuer agent writes the necessary crypto material into the ledger i.e. schema and credential definition. The below screenshot display the query request. If schema Id or Credential Def Id is not passed as value in the respected API calls then initally registered schema Id or Credential Def Id is picked and queried from the ledger.
+
+![Screenshot from 2023-05-22 19-40-05](https://github.com/ksanjaykumar1/telecom-demo/assets/72605368/c3316e96-d43e-437a-8085-7fbeb2e31ecf)
+
+![Screenshot from 2023-05-22 19-40-29](https://github.com/ksanjaykumar1/telecom-demo/assets/72605368/258ab039-0511-4f01-a22f-20df8d2fd1e0)
+
 
 ## 2.Connection establishment between Issuer and holder
 

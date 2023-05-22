@@ -142,12 +142,25 @@ Once the verifier agent recieve the proof record from the holder then the verife
 
 ![Screenshot from 2023-05-22 21-13-52](https://github.com/ksanjaykumar1/telecom-demo/assets/72605368/aa9962f5-e50f-41c8-8d0d-a88c978eed46)
 
-Once the verification is wished this verifer agents send the message that "Your credential is verified"
+Once the verification is finished this verifer agents send the message that "Your credential is verified"
 
 ![Screenshot from 2023-05-22 21-11-50](https://github.com/ksanjaykumar1/telecom-demo/assets/72605368/025465cc-32bc-4dec-bb99-fa57aec82025)
 
 
 # Screenshots of Mobile Wallet when using as holder
+![Screenshot_20230522-202303](https://github.com/ksanjaykumar1/telecom-demo/assets/72605368/243df635-8c78-4362-89c6-9dc7dfcd9761)
+
+
+
+![Screenshot_20230522-234518](https://github.com/ksanjaykumar1/telecom-demo/assets/72605368/f59f6d6a-2556-4cf8-b0de-9e146d1ef598)
+
+![Screenshot_20230522-234528](https://github.com/ksanjaykumar1/telecom-demo/assets/72605368/4d066ce2-4246-42ba-a928-8381c6514995)
+
+
+![Screenshot_20230522-160911](https://github.com/ksanjaykumar1/telecom-demo/assets/72605368/7e17ea41-ce39-4414-821c-51406312c16c)
+
+![Screenshot_20230522-234803](https://github.com/ksanjaykumar1/telecom-demo/assets/72605368/9915378e-47ef-4363-9b6a-61842309d75e)
+![Screenshot_20230522-235041](https://github.com/ksanjaykumar1/telecom-demo/assets/72605368/7596ef35-b50f-4e27-8534-5134ab4ae49b)
 
 
 

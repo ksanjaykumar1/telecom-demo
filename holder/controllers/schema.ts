@@ -35,7 +35,7 @@ const registerSchema = async (req: express.Request, res: express.Response) => {
 
 const getSchemaByName = async (req: express.Request, res: express.Response) => {
   const { name } = req.body;
-  const schema = fs.readFileSync(`/data/${name}.json`);
+  const schema = fs.readFileSync(`./data/${name}.json`);
   if (!schema) {
     throw new NotFound(
       `Schema with name ${name} doesn't exit in local storage `

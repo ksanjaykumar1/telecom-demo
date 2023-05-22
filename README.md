@@ -86,7 +86,7 @@ To check if a particular agent is connected to the mediator call the "get all co
 ![mediator](https://github.com/ksanjaykumar1/telecom-demo/assets/72605368/db9c70f9-68b7-4f41-8ec8-857ffc017787)
 The request was sent to issuer agent and it says the connection status is completed with Animo Mediator.
 
-At the start, the issuer agent writes the necessary crypto material into the ledger i.e. schema and credential definition. The below screenshot display the query request. If schema Id or Credential Def Id is not passed as value in the respected API calls then initally registered schema Id or Credential Def Id is picked and queried from the ledger.
+At the start, the issuer agent writes the necessary crypto material into the ledger i.e. schema and credential definition. The below screenshot display the query request. If schema Id or Credential Def Id is not passed as a value in the respected API calls then initally registered schema Id or Credential Def Id is picked and queried from the ledger and sent as a response to the API call.
 
 ![Screenshot from 2023-05-22 19-40-05](https://github.com/ksanjaykumar1/telecom-demo/assets/72605368/c3316e96-d43e-437a-8085-7fbeb2e31ecf)
 
@@ -94,6 +94,21 @@ At the start, the issuer agent writes the necessary crypto material into the led
 
 
 ## 2.Connection establishment between Issuer and holder
+
+When the agent is setup it created OOB invitation and displays QR code.
+![Screenshot from 2023-05-22 19-42-00](https://github.com/ksanjaykumar1/telecom-demo/assets/72605368/fb7a44f0-ac48-4e39-8c7e-5c319cbb1f12)
+
+If you lost it you can query the agent which you want to get connected with. The agent send the invitation url as json response and aslo displays the qrcode in the logs of the container. 
+
+![Screenshot from 2023-05-22 19-42-25](https://github.com/ksanjaykumar1/telecom-demo/assets/72605368/103e44cb-ccd0-4f1e-9f65-c39a861e26c3)
+
+The agent which wants to establish connection can scan the QR code or call the '/api/v1//out-of-band/receive-invitation' API by passing the invitation url to get connected. 
+
+![Screenshot from 2023-05-22 19-48-29](https://github.com/ksanjaykumar1/telecom-demo/assets/72605368/c5eba1ef-33c8-46f2-8f5e-95657bebad40)
+
+The issuer agent listner listens to the connection once the connection is established it send a message to the agent. 
+
+![Screenshot from 2023-05-22 19-48-59](https://github.com/ksanjaykumar1/telecom-demo/assets/72605368/98bdaab8-7dca-4b20-aebe-50775a8b64e3)
 
 ## 3. Issuance
 

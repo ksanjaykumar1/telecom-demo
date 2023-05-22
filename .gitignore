@@ -7,3 +7,8 @@ verifier/node_modules
 verifier/.env
 verifier/dist/
 verifier/data
+
+holder/node_modules
+holder/.env
+holder/dist/
+holder/data

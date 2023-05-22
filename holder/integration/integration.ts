@@ -50,11 +50,10 @@ const agentConfig: InitConfig = {
   label: label + utils.uuid(),
   autoAcceptConnections: true,
   autoAcceptProofs: AutoAcceptProof.Always,
-  autoAcceptCredentials: AutoAcceptCredential.ContentApproved,
+  autoAcceptCredentials: AutoAcceptCredential.Always,
   mediatorConnectionsInvite: mediatorInvitationUrl,
   indyLedgers: ledgers,
   publicDidSeed,
-  autoUpdateStorageOnStartup: true,
   walletConfig: {
     id: label,
     key: 'demoagentissuer00000000000000000',
@@ -73,10 +72,10 @@ async function initializeAgent(agentConfig: InitConfig) {
     //   agent.registerInboundTransport(new HttpInboundTransport({ port: agentPort }));
     agent.registerOutboundTransport(new WsOutboundTransport());
     console.log('Initializing agent...');
+    await agent.wallet.createAndOpen;
     await agent.initialize();
     console.log('Initializing agent... Success');
     // To clear all the old records in the wallet
-    // await agent.wallet.delete();
     return agent;
   } catch (error) {
     console.log(error);
@@ -87,12 +86,12 @@ async function initializeAgent(agentConfig: InitConfig) {
 export async function run() {
   agent = await initializeAgent(agentConfig);
   try {
-    initialOutOfBandRecord = await agent.oob.createInvitation();
-    invitationUrl = initialOutOfBandRecord.outOfBandInvitation.toUrl({
-      domain: 'https://example.org',
-    });
-    console.log(`Invitation URL ${invitationUrl}`);
-    qrcode.generate(invitationUrl, { small: true });
+    // initialOutOfBandRecord = await agent.oob.createInvitation();
+    // invitationUrl = initialOutOfBandRecord.outOfBandInvitation.toUrl({
+    //   domain: 'https://example.org',
+    // });
+    // console.log(`Invitation URL ${invitationUrl}`);
+    // qrcode.generate(invitationUrl, { small: true });
   } catch (error) {}
 }
 
@@ -187,7 +186,6 @@ const issueCredentialV1 = async (
   }
 };
 
-
 // Listners
 
 // connection Listner
@@ -212,6 +210,31 @@ const connectionListner = (outOfBandRecord: OutOfBandRecord) => {
   );
 };
 
+// credential  listner
+
+const credentialOfferListener = () => {
+  agent.events.on(
+    CredentialEventTypes.CredentialStateChanged,
+    async ({ payload }: CredentialStateChangedEvent) => {
+      if (payload.credentialRecord.state === CredentialState.OfferReceived) {
+        console.log('received credential');
+        console.log(payload.credentialRecord);
+      }
+    }
+  );
+};
+
+// proof lisnter
+const proofRequestListener = () => {
+  agent.events.on(
+    ProofEventTypes.ProofStateChanged,
+    async ({ payload }: ProofStateChangedEvent) => {
+      if (payload.proofRecord.state === ProofState.RequestReceived) {
+        console.log(payload.proofRecord);
+      }
+    }
+  );
+};
 export {
   agent,
   invitationUrl,
@@ -223,4 +246,6 @@ export {
   sendMessage,
   connectedConnectionRecord,
   issueCredentialV1,
+  credentialOfferListener,
+  proofRequestListener,
 };

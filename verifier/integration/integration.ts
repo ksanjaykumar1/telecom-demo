@@ -194,7 +194,7 @@ const sendProofRequest = async (
 ) => {
   const proofAttribute = {
     name: new ProofAttributeInfo({
-      name: 'proof-request',
+      name: 'age',
       restrictions: [
         new AttributeFilter({
           credentialDefinitionId: credentialDefinitionId,
@@ -209,6 +209,7 @@ const sendProofRequest = async (
       indy: {
         name: 'proof-request',
         version: '1.0',
+        nonce: '1298236324864',
         requestedAttributes: proofAttribute,
       },
     },
@@ -240,6 +241,26 @@ const connectionListner = (outOfBandRecord: OutOfBandRecord) => {
   );
 };
 
+// Proof request Accepted Listner
+const proofAcceptedListener = async () => {
+  agent.events.on(
+    ProofEventTypes.ProofStateChanged,
+    async ({ payload }: ProofStateChangedEvent) => {
+      if (payload.proofRecord.state === ProofState.Done) {
+        console.log(payload.proofRecord);
+        if (payload.proofRecord.isVerified) {
+          console.log('succesfully veriferd......');
+          await sendMessage(
+            <string>payload.proofRecord.connectionId,
+            `Your credential is verified`
+          );
+          console.log(payload.proofRecord.metadata);
+        }
+      }
+    }
+  );
+};
+
 export {
   agent,
   invitationUrl,
@@ -252,4 +273,5 @@ export {
   connectedConnectionRecord,
   issueCredentialV1,
   sendProofRequest,
+  proofAcceptedListener,
 };

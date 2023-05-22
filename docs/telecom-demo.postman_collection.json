@@ -1,0 +1,840 @@
+{
+	"info": {
+		"_postman_id": "03d250d6-6d75-4028-a966-eb056685dc6f",
+		"name": "telecom-demo",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "issuer",
+			"item": [
+				{
+					"name": "connections",
+					"item": [
+						{
+							"name": "get all connections",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{host3000}}/{{version1}}/connections/all",
+									"host": [
+										"{{host3000}}"
+									],
+									"path": [
+										"{{version1}}",
+										"connections",
+										"all"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "get all connections for current OOB invitation",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{issuerbase}}/{{version1}}/connections/connectionsByOobId",
+									"host": [
+										"{{issuerbase}}"
+									],
+									"path": [
+										"{{version1}}",
+										"connections",
+										"connectionsByOobId"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "connected Connection Record",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"content\": \"Hello\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{issuerbase}}/{{version1}}/connections/connectedConnectionRecord",
+									"host": [
+										"{{issuerbase}}"
+									],
+									"path": [
+										"{{version1}}",
+										"connections",
+										"connectedConnectionRecord"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "send basic message",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"message\": \"please please\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host3000}}/{{version1}}/connections/51bf3005-1b22-4e53-9eaf-f9330ac96762/sendMessage",
+									"host": [
+										"{{host3000}}"
+									],
+									"path": [
+										"{{version1}}",
+										"connections",
+										"51bf3005-1b22-4e53-9eaf-f9330ac96762",
+										"sendMessage"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "schemas",
+					"item": [
+						{
+							"name": "getSchems by Id",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"schema_id\": \"\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host3000}}/{{version1}}/schemas/",
+									"host": [
+										"{{host3000}}"
+									],
+									"path": [
+										"{{version1}}",
+										"schemas",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "getSchems by  name",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{host3000}}/{{version1}}/schemas/name",
+									"host": [
+										"{{host3000}}"
+									],
+									"path": [
+										"{{version1}}",
+										"schemas",
+										"name"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Register Schema",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"attributes\": [\n        \"name\",\n        \"age\"\n    ],\n    \"name\": \"identity\",\n    \"version\": \"1.0\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host3000}}/{{version1}}/schemas/register",
+									"host": [
+										"{{host3000}}"
+									],
+									"path": [
+										"{{version1}}",
+										"schemas",
+										"register"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "credential-definitions",
+					"item": [
+						{
+							"name": "credential-definitions by Id",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"credDef_id\": \"\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{issuerbase}}/{{version1}}/credential-definitions/",
+									"host": [
+										"{{issuerbase}}"
+									],
+									"path": [
+										"{{version1}}",
+										"credential-definitions",
+										""
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "issue-credential/send",
+					"item": [
+						{
+							"name": "send credential",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\n    \"attributes\": {\n        \"name\": \"Holder\",\n        \"age\": \"23\"\n    }\n\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{issuerbase}}/{{version1}}/issue-credential/send",
+									"host": [
+										"{{issuerbase}}"
+									],
+									"path": [
+										"{{version1}}",
+										"issue-credential",
+										"send"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "out of band",
+					"item": [
+						{
+							"name": "get Invitation url and display QR code in terminal",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{issuerbase}}/{{version1}}/out-of-band/invitation",
+									"host": [
+										"{{issuerbase}}"
+									],
+									"path": [
+										"{{version1}}",
+										"out-of-band",
+										"invitation"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "verifier",
+			"item": [
+				{
+					"name": "connections",
+					"item": [
+						{
+							"name": "get all connections",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{veriferbase}}/{{version1}}/connections/all",
+									"host": [
+										"{{veriferbase}}"
+									],
+									"path": [
+										"{{version1}}",
+										"connections",
+										"all"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "get all connections for current OOB invitation",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{veriferbase}}/{{version1}}/connections/connectionsByOobId",
+									"host": [
+										"{{veriferbase}}"
+									],
+									"path": [
+										"{{version1}}",
+										"connections",
+										"connectionsByOobId"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "connected Connection Record",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"content\": \"Hello\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{veriferbase}}/{{version1}}/connections/connectedConnectionRecord",
+									"host": [
+										"{{veriferbase}}"
+									],
+									"path": [
+										"{{version1}}",
+										"connections",
+										"connectedConnectionRecord"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "send basic message",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"message\": \"please please\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{veriferbase}}/{{version1}}/connections/51bf3005-1b22-4e53-9eaf-f9330ac96762/sendMessage",
+									"host": [
+										"{{veriferbase}}"
+									],
+									"path": [
+										"{{version1}}",
+										"connections",
+										"51bf3005-1b22-4e53-9eaf-f9330ac96762",
+										"sendMessage"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "schemas",
+					"item": [
+						{
+							"name": "getSchems by Id",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"schema_id\": \"\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{veriferbase}}/{{version1}}/schemas/",
+									"host": [
+										"{{veriferbase}}"
+									],
+									"path": [
+										"{{version1}}",
+										"schemas",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "getSchems by  name",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"schema\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{veriferbase}}/{{version1}}/schemas/name",
+									"host": [
+										"{{veriferbase}}"
+									],
+									"path": [
+										"{{version1}}",
+										"schemas",
+										"name"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Register Schema",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"attributes\": [\n        \"name\",\n        \"age\"\n    ],\n    \"name\": \"identity\",\n    \"version\": \"1.0\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{veriferbase}}/{{version1}}/schemas/register",
+									"host": [
+										"{{veriferbase}}"
+									],
+									"path": [
+										"{{version1}}",
+										"schemas",
+										"register"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "credential-definitions",
+					"item": [
+						{
+							"name": "credential-definitions by Id",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"schema_id\": \"\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{veriferbase}}/{{version1}}/credential-definitions/",
+									"host": [
+										"{{veriferbase}}"
+									],
+									"path": [
+										"{{version1}}",
+										"credential-definitions",
+										""
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "issue-credential/send",
+					"item": [
+						{
+							"name": "send credential",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\n\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{veriferbase}}/{{version1}}/issue-credential/send",
+									"host": [
+										"{{veriferbase}}"
+									],
+									"path": [
+										"{{version1}}",
+										"issue-credential",
+										"send"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "out of band",
+					"item": [
+						{
+							"name": "get Invitation url and display QR code in terminal",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{veriferbase}}/{{version1}}/out-of-band/invitation",
+									"host": [
+										"{{veriferbase}}"
+									],
+									"path": [
+										"{{version1}}",
+										"out-of-band",
+										"invitation"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "present-proof",
+					"item": [
+						{
+							"name": "request proof",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"credentialDefinitionId\":\"9h4Vo3rUZrAc6WJRNgcteo:3:CL:811409:latest\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{veriferbase}}/{{version1}}/present-proof/request",
+									"host": [
+										"{{veriferbase}}"
+									],
+									"path": [
+										"{{version1}}",
+										"present-proof",
+										"request"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "holder",
+			"item": [
+				{
+					"name": "out of band",
+					"item": [
+						{
+							"name": "get Invitation url and display QR code in terminal",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{holderbase}}/{{version1}}/out-of-band/invitation",
+									"host": [
+										"{{holderbase}}"
+									],
+									"path": [
+										"{{version1}}",
+										"out-of-band",
+										"invitation"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "get Invitation url and display QR code in terminal Copy",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"invitationUrl\": \"https://example.org?oob=eyJAdHlwZSI6Imh0dHBzOi8vZGlkY29tbS5vcmcvb3V0LW9mLWJhbmQvMS4xL2ludml0YXRpb24iLCJAaWQiOiI5MWQyOWZhYS0xMTc2LTRhNTAtYWZiMC03MjRlNDNkM2ExOTciLCJsYWJlbCI6InRlbGVjb20tb3BlcmF0b3ItNmVlNDE2NTktOGFhNS00OGJhLWIzMTMtN2Q2YmE4ODI5OTJiIiwiYWNjZXB0IjpbImRpZGNvbW0vYWlwMSIsImRpZGNvbW0vYWlwMjtlbnY9cmZjMTkiXSwiaGFuZHNoYWtlX3Byb3RvY29scyI6WyJodHRwczovL2RpZGNvbW0ub3JnL2RpZGV4Y2hhbmdlLzEuMCIsImh0dHBzOi8vZGlkY29tbS5vcmcvY29ubmVjdGlvbnMvMS4wIl0sInNlcnZpY2VzIjpbeyJpZCI6IiNpbmxpbmUtMCIsInNlcnZpY2VFbmRwb2ludCI6Imh0dHBzOi8vbWVkaWF0b3IuZGV2LmFuaW1vLmlkIiwidHlwZSI6ImRpZC1jb21tdW5pY2F0aW9uIiwicmVjaXBpZW50S2V5cyI6WyJkaWQ6a2V5Ono2TWtnQlNIQVU4UWp0eUJXWkdRVFJhbTNmVGs1SFlEczhUVVN3NXBCUTN0WlpBdSJdLCJyb3V0aW5nS2V5cyI6WyJkaWQ6a2V5Ono2TWtoeXF5UkJVVWk5cVhtZmlrU1FOSGY4ZjZDV29Nbk01VlR3SjVXa3NraU5pYiJdfV19\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{holderbase}}/{{version1}}/out-of-band/receive-invitation",
+									"host": [
+										"{{holderbase}}"
+									],
+									"path": [
+										"{{version1}}",
+										"out-of-band",
+										"receive-invitation"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "credential",
+					"item": [
+						{
+							"name": "get credential by Id",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{holderbase}}/{{version1}}/credential/all",
+									"host": [
+										"{{holderbase}}"
+									],
+									"path": [
+										"{{version1}}",
+										"credential",
+										"all"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "get all credentials",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{holderbase}}/{{version1}}/credential/all",
+									"host": [
+										"{{holderbase}}"
+									],
+									"path": [
+										"{{version1}}",
+										"credential",
+										"all"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "connections",
+			"item": [
+				{
+					"name": "get all connections",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{holderbase}}/{{version1}}/connections/all",
+							"host": [
+								"{{holderbase}}"
+							],
+							"path": [
+								"{{version1}}",
+								"connections",
+								"all"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "connected Connection Record",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"content\": \"Hello\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{holderbase}}/{{version1}}/connections/connectedConnectionRecord",
+							"host": [
+								"{{holderbase}}"
+							],
+							"path": [
+								"{{version1}}",
+								"connections",
+								"connectedConnectionRecord"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "send basic message",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"message\": \"please please\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{veriferbase}}/{{version1}}/connections/51bf3005-1b22-4e53-9eaf-f9330ac96762/sendMessage",
+							"host": [
+								"{{veriferbase}}"
+							],
+							"path": [
+								"{{version1}}",
+								"connections",
+								"51bf3005-1b22-4e53-9eaf-f9330ac96762",
+								"sendMessage"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

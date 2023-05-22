@@ -41,14 +41,12 @@ docker logs issuer -f
 
 > NOTE: Internet connection is a must because application interacts with online BCovrin Test Indy network and online mediator provided by Animo.
 
-## Process Flow
-
-There are two way to perfrom the operations.
+## There are two way to perform the interacts between Agents
 
 1. Use the all three agents in the project.
 2. **Use your mobile digital wallet as a holder (USE BC WALLET by British Columbia, the app is available in Play Store)** to perform the interaction. All three agents use online mediator which makes it possible to communicate outside the local system.
 
-### Postman Collection
+## Postman Collection
 
 Postman collections are added in the docs folder. This need to be imported and used to communicate with the agents.
 I have used the following global variable, please set these global variables for the project.
@@ -57,3 +55,33 @@ I have used the following global variable, please set these global variables for
 2. "holderbase" and it's value is "localhost:5000"
 3. "verifierbase" and it's value is "localhost:4000"
 4. "version1" and its' value is "api/v1"
+
+# Flow
+
+I am going to decribe the flow of
+
+1.  Agent Setup.
+2.  Connection Establishment.
+3.  Issuance.
+
+        a. Credential offer.
+        b. Acceptiong credential offer.
+        c. Receiving credential.
+
+4.  Verification
+
+        a. Proof request
+        b. Acceptance of proof request
+        c. Verification of proof
+        d. Issuance of phone number in form of  credential (TODO)
+
+These numbering are seperate from the above project flow.
+
+## 1.Agent Setup
+
+
+## 2.Connection establishment between Issuer and holder
+
+## 3. Issuance
+
+## 4 Verification

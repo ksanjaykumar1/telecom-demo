@@ -1,0 +1,41 @@
+version: '3.7'
+
+services:
+  issuer:
+    image: issuer
+    container_name: issuer
+    build:
+      context: ./issuer/
+    env_file: ./issuer/.env
+    ports:
+      - 3000:3000
+    volumes:
+      - node_modules:/app/node_modules
+
+  verifier:
+    image: verifier
+    container_name: verifier
+    build:
+      context: ./verifier
+    env_file: ./verifier/.env
+    ports:
+      - 4000:4000
+    volumes:
+      - node_modulesV:/app/node_modules
+
+  holder:
+    image: holder
+    container_name: holder
+    build:
+      context: ./holder
+    env_file: ./holder/.env
+    ports:
+      - 5000:5000
+    volumes:
+      - node_modulesH:/app/node_modules
+
+
+volumes:
+  node_modules:
+  node_modulesV:
+  node_modulesH:

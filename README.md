@@ -127,16 +127,27 @@ The holder agent can be called at 'api/v1/credential/all' to get all credential 
 
 ## 4 Verification
 
+As mentioned in the step 2, first the verifer and the holder will establish connection. 
+
+The verifer agent can send proof request by calling 'api/v1/present-proof/request' API and in the request body it mentions the credentialDefinitionId. You can get the credentialDefinitionId by querying issuer agent 
+as shown in the last screenshot of Agent Setup. 
+
+Both the verifer and the holder will setup a listner to handle proof request and the proof record. Both agents are configured to autoaccept the proofs.
+
 ![Screenshot from 2023-05-22 21-08-30](https://github.com/ksanjaykumar1/telecom-demo/assets/72605368/3489368c-7a25-4cc7-a27f-20b022a8e651)
 
 ![Screenshot from 2023-05-22 21-17-07](https://github.com/ksanjaykumar1/telecom-demo/assets/72605368/dafbf544-5686-4481-b7f7-4abd07fab849)
 
+Once the verifier agent recieve the proof record from the holder then the verifer agent will query the ledger to get credential defination and verify the proof record using the credential defination. 
 
 ![Screenshot from 2023-05-22 21-13-52](https://github.com/ksanjaykumar1/telecom-demo/assets/72605368/aa9962f5-e50f-41c8-8d0d-a88c978eed46)
 
-
-
+Once the verification is wished this verifer agents send the message that "Your credential is verified"
 
 ![Screenshot from 2023-05-22 21-11-50](https://github.com/ksanjaykumar1/telecom-demo/assets/72605368/025465cc-32bc-4dec-bb99-fa57aec82025)
+
+
+# Screenshots of Mobile Wallet when using as holder
+
 
 

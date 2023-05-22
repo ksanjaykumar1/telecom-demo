@@ -34,7 +34,7 @@ RUN apt install -y g++-11 gcc-11 -y
 
 WORKDIR /app
 
-COPY ["package.json", "yarn.lock", "./"]
+COPY ["./package.json", "./yarn.lock", "./"]
 
 RUN yarn 
 

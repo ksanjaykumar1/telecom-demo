@@ -29,7 +29,9 @@ docker logs holder -f
 ```
 docker logs issuer -f
 ```
+### Software Requirements
+1. Docker
+2. Docker Compose V2
 
-Check the required software and other details about the project below.
 
 

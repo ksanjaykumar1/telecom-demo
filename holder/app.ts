@@ -13,7 +13,9 @@ import debug from 'debug';
 import {
   agent,
   connectionListner,
+  credentialOfferListener,
   initialOutOfBandRecord,
+  proofRequestListener,
   registerInitialScehmaAndCredDef,
   run,
 } from './integration/integration';
@@ -22,7 +24,7 @@ import schema from './routes/schema';
 import credDef from './routes/credDef';
 import issueCredentialV1 from './routes/issueCredentials-v1';
 import outOfBand from './routes/outOfBand';
-
+import credential from './routes/credential';
 import notFound from './middleware/not-found';
 import { removeData } from './utils/file';
 import errorHandler from './middleware/errorHandler';
@@ -61,6 +63,7 @@ app.use('/api/v1/schemas', schema);
 app.use('/api/v1/credential-definitions', credDef);
 app.use('/api/v1/issue-credential', issueCredentialV1);
 app.use('/api/v1/out-of-band', outOfBand);
+app.use('/api/v1/credential', credential);
 
 // this is a simple route to make sure everything is working properly
 const runningMessage = `Server running at http://localhost:${port}`;
@@ -73,26 +76,12 @@ app.use(errorHandler);
 
 const start = async () => {
   try {
-    // "provision" is intended to be used one time per agent deployment
-    // to establish its secure storage database and the required ledger objects.
-    // if (!agent.wallet.isProvisioned) {
-    // to clean local storage
-    // removeData();
     await run();
-    // await connectionListner(initialOutOfBandRecord);
-    // console.log('before registering schema and cred def');
-    // await registerInitialScehmaAndCredDef();
-    // }
+    credentialOfferListener();
+    proofRequestListener();
 
     server.listen(port, () => {
-      // our only exception to avoiding console.log(), because we
-      // always want to know when the server is done starting up
       console.log(runningMessage);
-      // const invitationUrl = initialOutOfBandRecord.outOfBandInvitation.toUrl({
-      //   domain: 'https://example.org',
-      // });
-      // console.log(`Invitation URL ${invitationUrl}`);
-      // qrcode.generate(invitationUrl, { small: true });
     });
   } catch (error) {
     console.log(error);

@@ -102,14 +102,37 @@ If you lost it you can query the agent which you want to get connected with. The
 
 ![Screenshot from 2023-05-22 19-42-25](https://github.com/ksanjaykumar1/telecom-demo/assets/72605368/103e44cb-ccd0-4f1e-9f65-c39a861e26c3)
 
-The agent which wants to establish connection can scan the QR code or call the '/api/v1//out-of-band/receive-invitation' API by passing the invitation url to get connected. 
+The agent which wants to establish connection can scan the QR code or call the '/api/v1//out-of-band/receive-invitation' API by passing the invitation url to get connected. The 
 
 ![Screenshot from 2023-05-22 19-48-29](https://github.com/ksanjaykumar1/telecom-demo/assets/72605368/c5eba1ef-33c8-46f2-8f5e-95657bebad40)
 
-The issuer agent listner listens to the connection once the connection is established it send a message to the agent. 
+The issuer agent listner listens to the connection request by OOB record once the connection is established it send a message to the agent and the connection ID of the holder is stored and exported for other services to use.
 
 ![Screenshot from 2023-05-22 19-48-59](https://github.com/ksanjaykumar1/telecom-demo/assets/72605368/98bdaab8-7dca-4b20-aebe-50775a8b64e3)
 
+
 ## 3. Issuance
 
+The issuer agent sends the credential offer when '/api/v1/issue-credential/send' API is called with the values of credential. 
+
+![Screenshot from 2023-05-22 20-32-14](https://github.com/ksanjaykumar1/telecom-demo/assets/72605368/06f11199-11b7-411f-b9b2-05835d083128)
+
+
+The holder agent as setup a listner and it listen to the credential offer it recieves and the holder agent in this code configured to auto accept the credential offer, holder agent accepts the offer and the issuer agent send the credential
+![Screenshot from 2023-05-22 20-33-06](https://github.com/ksanjaykumar1/telecom-demo/assets/72605368/fd294e80-9d0e-4dc5-a938-78fdb446950f)
+
+![Screenshot from 2023-05-22 20-34-13](https://github.com/ksanjaykumar1/telecom-demo/assets/72605368/e435d793-1d23-4a0e-8483-348a19239187)
+
 ## 4 Verification
+
+![Screenshot from 2023-05-22 21-08-30](https://github.com/ksanjaykumar1/telecom-demo/assets/72605368/3489368c-7a25-4cc7-a27f-20b022a8e651)
+
+
+![Screenshot from 2023-05-22 21-13-52](https://github.com/ksanjaykumar1/telecom-demo/assets/72605368/aa9962f5-e50f-41c8-8d0d-a88c978eed46)
+
+
+
+
+![Screenshot from 2023-05-22 21-11-50](https://github.com/ksanjaykumar1/telecom-demo/assets/72605368/025465cc-32bc-4dec-bb99-fa57aec82025)
+
+

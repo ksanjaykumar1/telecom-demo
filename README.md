@@ -16,6 +16,8 @@ The standard process of getting a mobile sim card in India is visiting a telecom
 
 Create .env file from .env-sample in each of the issuer, holder and verifer folder. And run the following command from the root directory of this repo.
 
+> NOTE: The below command will build the docker images and create the network this will take more than 7 minutes. The indy-sdk libraries such as libzmq3-dev, libsodium-dev, pkg-config, libssl-dev, libindy etc that is the reason for selecting ubuntu 18 as the base image instead of light weight image such as "node:16.13-slim".
+
 ```
 docker compose up -d --build
 ```

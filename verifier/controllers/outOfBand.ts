@@ -1,6 +1,10 @@
 import express from 'express';
 import qrcode from 'qrcode-terminal';
-import { initialOutOfBandRecord } from '../integration/integration';
+import {
+  agent,
+  createOutOfBandRecord,
+  initialOutOfBandRecord,
+} from '../integration/integration';
 
 const getInvitation = async (req: express.Request, res: express.Response) => {
   const invitationUrl = initialOutOfBandRecord.outOfBandInvitation.toUrl({
@@ -11,4 +15,25 @@ const getInvitation = async (req: express.Request, res: express.Response) => {
   res.status(200).json({ invitationUrl });
 };
 
-export { getInvitation };
+const createInvitation = async (
+  req: express.Request,
+  res: express.Response
+) => {
+  const invitationUrl = await createOutOfBandRecord();
+  qrcode.generate(invitationUrl, { small: true });
+  res.status(200).json({ invitationUrl });
+};
+
+const receiveInvitation = async (
+  req: express.Request,
+  res: express.Response
+) => {
+  const { invitationUrl } = req.body;
+
+  const { connectionRecord } = await agent.oob.receiveInvitationFromUrl(
+    invitationUrl
+  );
+  res.status(200).json({ connectionRecord });
+};
+
+export { getInvitation, createInvitation, receiveInvitation };

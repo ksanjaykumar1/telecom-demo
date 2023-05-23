@@ -97,6 +97,16 @@ export async function run() {
   } catch (error) {}
 }
 
+const createOutOfBandRecord = async () => {
+  // updating initial OOB with the latest one
+  initialOutOfBandRecord = await agent.oob.createInvitation();
+  invitationUrl = initialOutOfBandRecord.outOfBandInvitation.toUrl({
+    domain: 'https://example.org',
+  });
+  qrcode.generate(invitationUrl, { small: true });
+  return invitationUrl;
+};
+
 const registerSchema = async (
   attributes: string[],
   name: string,
@@ -289,6 +299,7 @@ export {
   registerSchema,
   registerCredentialDefinition,
   initialOutOfBandRecord,
+  createOutOfBandRecord,
   connectionListner,
   sendMessage,
   connectedConnectionRecord,

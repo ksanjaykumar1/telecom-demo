@@ -96,6 +96,15 @@ export async function run() {
   } catch (error) {}
 }
 
+const createOutOfBandRecord = async () => {
+  // updating initial OOB with the latest one
+  initialOutOfBandRecord = await agent.oob.createInvitation();
+  invitationUrl = initialOutOfBandRecord.outOfBandInvitation.toUrl({
+    domain: 'https://example.org',
+  });
+  return invitationUrl;
+};
+
 const registerSchema = async (
   attributes: string[],
   name: string,
@@ -187,7 +196,6 @@ const issueCredentialV1 = async (
   }
 };
 
-
 // Listners
 
 // connection Listner
@@ -219,6 +227,7 @@ export {
   registerSchema,
   registerCredentialDefinition,
   initialOutOfBandRecord,
+  createOutOfBandRecord,
   connectionListner,
   sendMessage,
   connectedConnectionRecord,

@@ -82,8 +82,9 @@ const start = async () => {
     // to clean local storage
     removeData();
     await run();
-    await connectionListner(initialOutOfBandRecord);
-    await proofAcceptedListener();
+    connectionListner(initialOutOfBandRecord);
+    proofAcceptedListener();
+    await registerInitialScehmaAndCredDef();
     // console.log('before registering schema and cred def');
     // await registerInitialScehmaAndCredDef();
     // }

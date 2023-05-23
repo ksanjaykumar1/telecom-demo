@@ -141,11 +141,20 @@ const registerCredentialDefinition = async (schema: any) => {
   } catch (error) {}
 };
 
+const getDefaultCredDefId = () => {
+  const initialCredDefBuffer = fs.readFileSync(
+    `./data/credentialDefinition.json`,
+    'utf8'
+  );
+  const initialCredDef = JSON.parse(initialCredDefBuffer);
+  return initialCredDef.id;
+};
+
 const registerInitialScehmaAndCredDef = async () => {
   console.log('called registerInitialScehmaAndCredDef');
 
   const schema = await registerSchema(
-    ['name', 'age'],
+    ['phoneNumber'],
     schemaName + utils.uuid(),
     '1.0'
   );
@@ -242,7 +251,7 @@ const connectionListner = (outOfBandRecord: OutOfBandRecord) => {
 };
 
 // Proof request Accepted Listner
-const proofAcceptedListener = async () => {
+const proofAcceptedListener = () => {
   agent.events.on(
     ProofEventTypes.ProofStateChanged,
     async ({ payload }: ProofStateChangedEvent) => {
@@ -254,7 +263,19 @@ const proofAcceptedListener = async () => {
             <string>payload.proofRecord.connectionId,
             `Your credential is verified`
           );
-          console.log(payload.proofRecord.metadata);
+          const credDefId = getDefaultCredDefId();
+          await issueCredentialV1(credDefId, connectedConnectionRecord.id, {
+            phoneNumber: '9887766554',
+          });
+          await sendMessage(
+            <string>payload.proofRecord.connectionId,
+            `We have issued you sim card with phone number: 9887766554 .`
+          );
+        } else {
+          await sendMessage(
+            <string>payload.proofRecord.connectionId,
+            `Verification failed and we cannot issue you simcar.`
+          );
         }
       }
     }

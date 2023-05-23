@@ -17,9 +17,9 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{host3000}}/{{version1}}/connections/all",
+									"raw": "{{issuerbase}}/{{version1}}/connections/all",
 									"host": [
-										"{{host3000}}"
+										"{{issuerbase}}"
 									],
 									"path": [
 										"{{version1}}",
@@ -96,7 +96,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"message\": \"please please\"\n}",
+									"raw": "{\n    \"message\": \"How are you?\"\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -104,14 +104,14 @@
 									}
 								},
 								"url": {
-									"raw": "{{host3000}}/{{version1}}/connections/51bf3005-1b22-4e53-9eaf-f9330ac96762/sendMessage",
+									"raw": "{{host3000}}/{{version1}}/connections/23006d50-700e-4b9f-833e-2e5b4b8eae29/sendMessage",
 									"host": [
 										"{{host3000}}"
 									],
 									"path": [
 										"{{version1}}",
 										"connections",
-										"51bf3005-1b22-4e53-9eaf-f9330ac96762",
+										"23006d50-700e-4b9f-833e-2e5b4b8eae29",
 										"sendMessage"
 									]
 								}
@@ -141,9 +141,9 @@
 									}
 								},
 								"url": {
-									"raw": "{{host3000}}/{{version1}}/schemas/",
+									"raw": "{{issuerbase}}/{{version1}}/schemas/",
 									"host": [
-										"{{host3000}}"
+										"{{issuerbase}}"
 									],
 									"path": [
 										"{{version1}}",
@@ -156,6 +156,9 @@
 						},
 						{
 							"name": "getSchems by  name",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
 							"request": {
 								"method": "GET",
 								"header": [
@@ -164,6 +167,15 @@
 										"value": "application/json"
 									}
 								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"schema\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
 								"url": {
 									"raw": "{{host3000}}/{{version1}}/schemas/name",
 									"host": [
@@ -245,7 +257,7 @@
 					]
 				},
 				{
-					"name": "issue-credential/send",
+					"name": "issue-credential",
 					"item": [
 						{
 							"name": "send credential",
@@ -254,7 +266,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n\n    \"attributes\": {\n        \"name\": \"Holder\",\n        \"age\": \"23\"\n    }\n\n}",
+									"raw": "{\n\n    \"attributes\": {\n        \"name\": \"Santosh\",\n        \"age\": \"22\"\n    }\n\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -281,6 +293,34 @@
 					"name": "out of band",
 					"item": [
 						{
+							"name": "recieve invitation",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"invitationUrl\": \"https://example.org?oob=eyJAdHlwZSI6Imh0dHBzOi8vZGlkY29tbS5vcmcvb3V0LW9mLWJhbmQvMS4xL2ludml0YXRpb24iLCJAaWQiOiI4NDkzZDI0Zi0wOTBhLTQ5ZDctOWY2Yi0xZDZhOWMyZmRjMjkiLCJsYWJlbCI6InRlbGVjb20tb3BlcmF0b3ItMGU3OThlNDYtNmYzNC00ZDdhLThjYWYtYjYxMGRmMmU1MTUzIiwiYWNjZXB0IjpbImRpZGNvbW0vYWlwMSIsImRpZGNvbW0vYWlwMjtlbnY9cmZjMTkiXSwiaGFuZHNoYWtlX3Byb3RvY29scyI6WyJodHRwczovL2RpZGNvbW0ub3JnL2RpZGV4Y2hhbmdlLzEuMCIsImh0dHBzOi8vZGlkY29tbS5vcmcvY29ubmVjdGlvbnMvMS4wIl0sInNlcnZpY2VzIjpbeyJpZCI6IiNpbmxpbmUtMCIsInNlcnZpY2VFbmRwb2ludCI6Imh0dHBzOi8vbWVkaWF0b3IuZGV2LmFuaW1vLmlkIiwidHlwZSI6ImRpZC1jb21tdW5pY2F0aW9uIiwicmVjaXBpZW50S2V5cyI6WyJkaWQ6a2V5Ono2TWtrR2c4NnJ1RXhBM1NIcXdCc0VqZXVKUFhCMWJyWms2RnZ0eVFCQThUTVFVZSJdLCJyb3V0aW5nS2V5cyI6WyJkaWQ6a2V5Ono2TWtoeXF5UkJVVWk5cVhtZmlrU1FOSGY4ZjZDV29Nbk01VlR3SjVXa3NraU5pYiJdfV19\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{issuerbase}}/{{version1}}/out-of-band/receive-invitation",
+									"host": [
+										"{{issuerbase}}"
+									],
+									"path": [
+										"{{version1}}",
+										"out-of-band",
+										"receive-invitation"
+									]
+								}
+							},
+							"response": []
+						},
+						{
 							"name": "get Invitation url and display QR code in terminal",
 							"request": {
 								"method": "GET",
@@ -294,6 +334,25 @@
 										"{{version1}}",
 										"out-of-band",
 										"invitation"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "create new invitation",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{issuerbase}}/{{version1}}/out-of-band/create-invitation",
+									"host": [
+										"{{issuerbase}}"
+									],
+									"path": [
+										"{{version1}}",
+										"out-of-band",
+										"create-invitation"
 									]
 								}
 							},
@@ -315,9 +374,9 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{veriferbase}}/{{version1}}/connections/all",
+									"raw": "{{verifierbase}}/{{version1}}/connections/all",
 									"host": [
-										"{{veriferbase}}"
+										"{{verifierbase}}"
 									],
 									"path": [
 										"{{version1}}",
@@ -334,9 +393,9 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{veriferbase}}/{{version1}}/connections/connectionsByOobId",
+									"raw": "{{verifierbase}}/{{version1}}/connections/connectionsByOobId",
 									"host": [
-										"{{veriferbase}}"
+										"{{verifierbase}}"
 									],
 									"path": [
 										"{{version1}}",
@@ -371,9 +430,9 @@
 									}
 								},
 								"url": {
-									"raw": "{{veriferbase}}/{{version1}}/connections/connectedConnectionRecord",
+									"raw": "{{verifierbase}}/{{version1}}/connections/connectedConnectionRecord",
 									"host": [
-										"{{veriferbase}}"
+										"{{verifierbase}}"
 									],
 									"path": [
 										"{{version1}}",
@@ -399,9 +458,9 @@
 									}
 								},
 								"url": {
-									"raw": "{{veriferbase}}/{{version1}}/connections/51bf3005-1b22-4e53-9eaf-f9330ac96762/sendMessage",
+									"raw": "{{verifierbase}}/{{version1}}/connections/51bf3005-1b22-4e53-9eaf-f9330ac96762/sendMessage",
 									"host": [
-										"{{veriferbase}}"
+										"{{verifierbase}}"
 									],
 									"path": [
 										"{{version1}}",
@@ -436,9 +495,9 @@
 									}
 								},
 								"url": {
-									"raw": "{{veriferbase}}/{{version1}}/schemas/",
+									"raw": "{{verifierbase}}/{{version1}}/schemas/",
 									"host": [
-										"{{veriferbase}}"
+										"{{verifierbase}}"
 									],
 									"path": [
 										"{{version1}}",
@@ -472,9 +531,9 @@
 									}
 								},
 								"url": {
-									"raw": "{{veriferbase}}/{{version1}}/schemas/name",
+									"raw": "{{verifierbase}}/{{version1}}/schemas/name",
 									"host": [
-										"{{veriferbase}}"
+										"{{verifierbase}}"
 									],
 									"path": [
 										"{{version1}}",
@@ -500,9 +559,9 @@
 									}
 								},
 								"url": {
-									"raw": "{{veriferbase}}/{{version1}}/schemas/register",
+									"raw": "{{verifierbase}}/{{version1}}/schemas/register",
 									"host": [
-										"{{veriferbase}}"
+										"{{verifierbase}}"
 									],
 									"path": [
 										"{{version1}}",
@@ -536,9 +595,9 @@
 									}
 								},
 								"url": {
-									"raw": "{{veriferbase}}/{{version1}}/credential-definitions/",
+									"raw": "{{verifierbase}}/{{version1}}/credential-definitions/",
 									"host": [
-										"{{veriferbase}}"
+										"{{verifierbase}}"
 									],
 									"path": [
 										"{{version1}}",
@@ -553,36 +612,7 @@
 				},
 				{
 					"name": "issue-credential/send",
-					"item": [
-						{
-							"name": "send credential",
-							"request": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n\n\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{veriferbase}}/{{version1}}/issue-credential/send",
-									"host": [
-										"{{veriferbase}}"
-									],
-									"path": [
-										"{{version1}}",
-										"issue-credential",
-										"send"
-									]
-								}
-							},
-							"response": []
-						}
-					]
+					"item": []
 				},
 				{
 					"name": "out of band",
@@ -593,14 +623,61 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{veriferbase}}/{{version1}}/out-of-band/invitation",
+									"raw": "{{verifierbase}}/{{version1}}/out-of-band/invitation",
 									"host": [
-										"{{veriferbase}}"
+										"{{verifierbase}}"
 									],
 									"path": [
 										"{{version1}}",
 										"out-of-band",
 										"invitation"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "create new invitation",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{verifierbase}}/{{version1}}/out-of-band/create-invitation",
+									"host": [
+										"{{verifierbase}}"
+									],
+									"path": [
+										"{{version1}}",
+										"out-of-band",
+										"create-invitation"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "recieve invitation Copy",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"invitationUrl\": \"https://example.org?oob=eyJAdHlwZSI6Imh0dHBzOi8vZGlkY29tbS5vcmcvb3V0LW9mLWJhbmQvMS4xL2ludml0YXRpb24iLCJAaWQiOiI4NDkzZDI0Zi0wOTBhLTQ5ZDctOWY2Yi0xZDZhOWMyZmRjMjkiLCJsYWJlbCI6InRlbGVjb20tb3BlcmF0b3ItMGU3OThlNDYtNmYzNC00ZDdhLThjYWYtYjYxMGRmMmU1MTUzIiwiYWNjZXB0IjpbImRpZGNvbW0vYWlwMSIsImRpZGNvbW0vYWlwMjtlbnY9cmZjMTkiXSwiaGFuZHNoYWtlX3Byb3RvY29scyI6WyJodHRwczovL2RpZGNvbW0ub3JnL2RpZGV4Y2hhbmdlLzEuMCIsImh0dHBzOi8vZGlkY29tbS5vcmcvY29ubmVjdGlvbnMvMS4wIl0sInNlcnZpY2VzIjpbeyJpZCI6IiNpbmxpbmUtMCIsInNlcnZpY2VFbmRwb2ludCI6Imh0dHBzOi8vbWVkaWF0b3IuZGV2LmFuaW1vLmlkIiwidHlwZSI6ImRpZC1jb21tdW5pY2F0aW9uIiwicmVjaXBpZW50S2V5cyI6WyJkaWQ6a2V5Ono2TWtrR2c4NnJ1RXhBM1NIcXdCc0VqZXVKUFhCMWJyWms2RnZ0eVFCQThUTVFVZSJdLCJyb3V0aW5nS2V5cyI6WyJkaWQ6a2V5Ono2TWtoeXF5UkJVVWk5cVhtZmlrU1FOSGY4ZjZDV29Nbk01VlR3SjVXa3NraU5pYiJdfV19\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{verifierbase}}/{{version1}}/out-of-band/receive-invitation",
+									"host": [
+										"{{verifierbase}}"
+									],
+									"path": [
+										"{{version1}}",
+										"out-of-band",
+										"receive-invitation"
 									]
 								}
 							},
@@ -618,7 +695,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"credentialDefinitionId\":\"9h4Vo3rUZrAc6WJRNgcteo:3:CL:811409:latest\"\n}",
+									"raw": "{\n    \"credentialDefinitionId\":\"9h4Vo3rUZrAc6WJRNgcteo:3:CL:812752:latest\"\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -626,9 +703,9 @@
 									}
 								},
 								"url": {
-									"raw": "{{veriferbase}}/{{version1}}/present-proof/request",
+									"raw": "{{verifierbase}}/{{version1}}/present-proof/request",
 									"host": [
-										"{{veriferbase}}"
+										"{{verifierbase}}"
 									],
 									"path": [
 										"{{version1}}",
@@ -669,13 +746,13 @@
 							"response": []
 						},
 						{
-							"name": "get Invitation url and display QR code in terminal Copy",
+							"name": "recieve invitation",
 							"request": {
 								"method": "POST",
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"invitationUrl\": \"https://example.org?oob=eyJAdHlwZSI6Imh0dHBzOi8vZGlkY29tbS5vcmcvb3V0LW9mLWJhbmQvMS4xL2ludml0YXRpb24iLCJAaWQiOiI5MWQyOWZhYS0xMTc2LTRhNTAtYWZiMC03MjRlNDNkM2ExOTciLCJsYWJlbCI6InRlbGVjb20tb3BlcmF0b3ItNmVlNDE2NTktOGFhNS00OGJhLWIzMTMtN2Q2YmE4ODI5OTJiIiwiYWNjZXB0IjpbImRpZGNvbW0vYWlwMSIsImRpZGNvbW0vYWlwMjtlbnY9cmZjMTkiXSwiaGFuZHNoYWtlX3Byb3RvY29scyI6WyJodHRwczovL2RpZGNvbW0ub3JnL2RpZGV4Y2hhbmdlLzEuMCIsImh0dHBzOi8vZGlkY29tbS5vcmcvY29ubmVjdGlvbnMvMS4wIl0sInNlcnZpY2VzIjpbeyJpZCI6IiNpbmxpbmUtMCIsInNlcnZpY2VFbmRwb2ludCI6Imh0dHBzOi8vbWVkaWF0b3IuZGV2LmFuaW1vLmlkIiwidHlwZSI6ImRpZC1jb21tdW5pY2F0aW9uIiwicmVjaXBpZW50S2V5cyI6WyJkaWQ6a2V5Ono2TWtnQlNIQVU4UWp0eUJXWkdRVFJhbTNmVGs1SFlEczhUVVN3NXBCUTN0WlpBdSJdLCJyb3V0aW5nS2V5cyI6WyJkaWQ6a2V5Ono2TWtoeXF5UkJVVWk5cVhtZmlrU1FOSGY4ZjZDV29Nbk01VlR3SjVXa3NraU5pYiJdfV19\"\n}",
+									"raw": "{\n    \"invitationUrl\": \"https://example.org?oob=eyJAdHlwZSI6Imh0dHBzOi8vZGlkY29tbS5vcmcvb3V0LW9mLWJhbmQvMS4xL2ludml0YXRpb24iLCJAaWQiOiI1MDZjMjBlMS1iMWJlLTRlOWYtOTAzNS0xN2NhMzgwYWQwOGMiLCJsYWJlbCI6IlVJREFJLTViOWQxOTg2LWQ0OWUtNDJhZS04NzI4LWQzMDAxZTEwMDQ3NCIsImFjY2VwdCI6WyJkaWRjb21tL2FpcDEiLCJkaWRjb21tL2FpcDI7ZW52PXJmYzE5Il0sImhhbmRzaGFrZV9wcm90b2NvbHMiOlsiaHR0cHM6Ly9kaWRjb21tLm9yZy9kaWRleGNoYW5nZS8xLjAiLCJodHRwczovL2RpZGNvbW0ub3JnL2Nvbm5lY3Rpb25zLzEuMCJdLCJzZXJ2aWNlcyI6W3siaWQiOiIjaW5saW5lLTAiLCJzZXJ2aWNlRW5kcG9pbnQiOiJodHRwczovL21lZGlhdG9yLmRldi5hbmltby5pZCIsInR5cGUiOiJkaWQtY29tbXVuaWNhdGlvbiIsInJlY2lwaWVudEtleXMiOlsiZGlkOmtleTp6Nk1raHJjbnpNWml0UlhNaHIyVzRLWUt3QTU1UEZkQ2l3NHdoU0M5OFRxZTM4SGEiXSwicm91dGluZ0tleXMiOlsiZGlkOmtleTp6Nk1raHlxeVJCVVVpOXFYbWZpa1NRTkhmOGY2Q1dvTW5NNVZUd0o1V2tza2lOaWIiXX1dfQ\"\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -704,17 +781,18 @@
 						{
 							"name": "get credential by Id",
 							"request": {
-								"method": "GET",
+								"method": "POST",
 								"header": [],
 								"url": {
-									"raw": "{{holderbase}}/{{version1}}/credential/all",
+									"raw": "{{holderbase}}/{{version1}}/credential/61fce9c2-e341-46af-9b9a-61d25e68affe/sendMessage",
 									"host": [
 										"{{holderbase}}"
 									],
 									"path": [
 										"{{version1}}",
 										"credential",
-										"all"
+										"61fce9c2-e341-46af-9b9a-61d25e68affe",
+										"sendMessage"
 									]
 								}
 							},
@@ -820,9 +898,9 @@
 							}
 						},
 						"url": {
-							"raw": "{{veriferbase}}/{{version1}}/connections/51bf3005-1b22-4e53-9eaf-f9330ac96762/sendMessage",
+							"raw": "{{holderbase}}/{{version1}}/connections/51bf3005-1b22-4e53-9eaf-f9330ac96762/sendMessage",
 							"host": [
-								"{{veriferbase}}"
+								"{{holderbase}}"
 							],
 							"path": [
 								"{{version1}}",

@@ -1,0 +1,260 @@
+openapi: 3.0.0
+info:
+  title: Issuer Agent APis
+  contact: {}
+  version: '1.0'
+servers:
+- url: http://localhost:3000/api/v1
+  variables: {}
+paths:
+  /connections/all:
+    get:
+      tags:
+      - connections
+      summary: get all connections
+      operationId: getallconnections
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+      security: []
+  /connections/connectionsByOobId:
+    get:
+      tags:
+      - connections
+      summary: get all connections for current OOB invitation
+      operationId: getallconnectionsforcurrentOOBinvitation
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+      security: []
+  /connections/connectedConnectionRecord:
+    get:
+      tags:
+      - connections
+      summary: connected Connection Record
+      operationId: connectedConnectionRecord
+      parameters:
+      - name: Content-Type
+        in: header
+        description: ''
+        required: true
+        style: simple
+        schema:
+          enum:
+          - application/json
+          type: string
+          example: application/json
+      - name: Accept
+        in: header
+        description: ''
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: application/json
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+      security: []
+  /connections/{conn_id}/sendMessage:
+    post:
+      tags:
+      - connections
+      summary: send basic message
+      operationId: sendbasicmessage
+      parameters: 
+        - in: path
+          name: conn_id
+          required: true
+          description: connection ID of the agent is required to send message
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/sendbasicmessagerequest'
+              - example:
+                  message: How are you?
+            example:
+              message: How are you?
+        required: true
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+      security: []
+  /schemas:
+    get:
+      tags:
+      - schemas
+      summary: getSchems by Id
+      operationId: getSchemsbyId
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+      security: []
+  /schemas/name:
+    get:
+      tags:
+      - schemas
+      summary: getSchems by  name
+      operationId: getSchemsbyname
+      parameters:
+      - name: Accept
+        in: header
+        description: ''
+        required: true
+        style: simple
+        schema:
+          type: string
+          example: application/json
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+      security: []
+  /schemas/register:
+    post:
+      tags:
+      - schemas
+      summary: Register Schema
+      operationId: RegisterSchema
+      parameters: []
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/RegisterSchemaRequest'
+              - example:
+                  attributes:
+                  - name
+                  - age
+                  name: identity
+                  version: '1.0'
+            example:
+              attributes:
+              - name
+              - age
+              name: identity
+              version: '1.0'
+        required: true
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+      security: []
+  /credential-definitions:
+    get:
+      tags:
+      - credential-definitions
+      summary: credential-definitions by Id
+      operationId: credential-definitionsbyId
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+  /issue-credential/send:
+    post:
+      tags:
+      - issue-credential
+      summary: send credential
+      operationId: sendcredential
+      parameters: []
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/sendcredentialrequest'
+              - example:
+                  attributes:
+                    name: Santosh
+                    age: '22'
+            example:
+              attributes:
+                name: Santosh
+                age: '22'
+        required: true
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+      security: []
+  /out-of-band/receive-invitation:
+    post:
+      tags:
+      - out of band
+      summary: recieve invitation
+      operationId: recieveinvitation
+      parameters: []
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/recieveinvitationrequest'
+              - example:
+                  invitationUrl: https://example.org?oob=eyJAdHlwZSI6Imh0dHBzOi8vZGlkY29tbS5vcmcvb3V0LW9mLWJhbmQvMS4xL2ludml0YXRpb24iLCJAaWQiOiI4NDkzZDI0Zi0wOTBhLTQ5ZDctOWY2Yi0xZDZhOWMyZmRjMjkiLCJsYWJlbCI6InRlbGVjb20tb3BlcmF0b3ItMGU3OThlNDYtNmYzNC00ZDdhLThjYWYtYjYxMGRmMmU1MTUzIiwiYWNjZXB0IjpbImRpZGNvbW0vYWlwMSIsImRpZGNvbW0vYWlwMjtlbnY9cmZjMTkiXSwiaGFuZHNoYWtlX3Byb3RvY29scyI6WyJodHRwczovL2RpZGNvbW0ub3JnL2RpZGV4Y2hhbmdlLzEuMCIsImh0dHBzOi8vZGlkY29tbS5vcmcvY29ubmVjdGlvbnMvMS4wIl0sInNlcnZpY2VzIjpbeyJpZCI6IiNpbmxpbmUtMCIsInNlcnZpY2VFbmRwb2ludCI6Imh0dHBzOi8vbWVkaWF0b3IuZGV2LmFuaW1vLmlkIiwidHlwZSI6ImRpZC1jb21tdW5pY2F0aW9uIiwicmVjaXBpZW50S2V5cyI6WyJkaWQ6a2V5Ono2TWtrR2c4NnJ1RXhBM1NIcXdCc0VqZXVKUFhCMWJyWms2RnZ0eVFCQThUTVFVZSJdLCJyb3V0aW5nS2V5cyI6WyJkaWQ6a2V5Ono2TWtoeXF5UkJVVWk5cVhtZmlrU1FOSGY4ZjZDV29Nbk01VlR3SjVXa3NraU5pYiJdfV19
+            example:
+              invitationUrl: https://example.org?oob=eyJAdHlwZSI6Imh0dHBzOi8vZGlkY29tbS5vcmcvb3V0LW9mLWJhbmQvMS4xL2ludml0YXRpb24iLCJAaWQiOiI4NDkzZDI0Zi0wOTBhLTQ5ZDctOWY2Yi0xZDZhOWMyZmRjMjkiLCJsYWJlbCI6InRlbGVjb20tb3BlcmF0b3ItMGU3OThlNDYtNmYzNC00ZDdhLThjYWYtYjYxMGRmMmU1MTUzIiwiYWNjZXB0IjpbImRpZGNvbW0vYWlwMSIsImRpZGNvbW0vYWlwMjtlbnY9cmZjMTkiXSwiaGFuZHNoYWtlX3Byb3RvY29scyI6WyJodHRwczovL2RpZGNvbW0ub3JnL2RpZGV4Y2hhbmdlLzEuMCIsImh0dHBzOi8vZGlkY29tbS5vcmcvY29ubmVjdGlvbnMvMS4wIl0sInNlcnZpY2VzIjpbeyJpZCI6IiNpbmxpbmUtMCIsInNlcnZpY2VFbmRwb2ludCI6Imh0dHBzOi8vbWVkaWF0b3IuZGV2LmFuaW1vLmlkIiwidHlwZSI6ImRpZC1jb21tdW5pY2F0aW9uIiwicmVjaXBpZW50S2V5cyI6WyJkaWQ6a2V5Ono2TWtrR2c4NnJ1RXhBM1NIcXdCc0VqZXVKUFhCMWJyWms2RnZ0eVFCQThUTVFVZSJdLCJyb3V0aW5nS2V5cyI6WyJkaWQ6a2V5Ono2TWtoeXF5UkJVVWk5cVhtZmlrU1FOSGY4ZjZDV29Nbk01VlR3SjVXa3NraU5pYiJdfV19
+        required: true
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+      security: []
+  /out-of-band/invitation:
+    get:
+      tags:
+      - out of band
+      summary: get Invitation url and display QR code in terminal
+      operationId: getInvitationurlanddisplayQRcodeinterminal
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+      security: []
+  /out-of-band/create-invitation:
+    get:
+      tags:
+      - out of band
+      summary: create new invitation
+      operationId: createnewinvitation
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+      security: []
+tags:
+- name: connections
+- name: schemas
+- name: credential-definitions
+- name: issue-credential
+- name: out of band

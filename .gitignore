@@ -12,3 +12,7 @@ holder/node_modules
 holder/.env
 holder/dist/
 holder/data
+
+node_modules
+dist
+.env

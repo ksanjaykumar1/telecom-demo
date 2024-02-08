@@ -3,12 +3,14 @@ import dotenv from 'dotenv';
 import { agent } from './agent/agent';
 import { AGENT_TYPE } from './constants/constant';
 import { createAndRegisterIndy } from './agent/did';
+import morganMiddleware from './util/morgan';
 
 dotenv.config();
 
 const app: Express = express();
 const port = process.env.PORT || 3000;
 
+app.use(morganMiddleware);
 app.get('/', (req: Request, res: Response) => {
   res.send('Express + TypeScript Server');
 });

@@ -1,0 +1,18 @@
+import { KeyType, TypedArrayEncoder } from '@aries-framework/core';
+import { DID_NAMESPACE, DID, SEED } from '../constants/constant';
+import { CustomAgent } from './agent';
+// import { log, underscore, yellow } from '../utils';
+
+export const createAndRegisterIndy = async (issuer: CustomAgent) => {
+  const seed = TypedArrayEncoder.fromString(SEED);
+  const indyDID = `${DID_NAMESPACE}${DID}`;
+  console.log(`indyDID ` + indyDID);
+
+  await issuer.dids.import({
+    did: indyDID,
+    overwrite: true,
+    privateKeys: [{ privateKey: seed, keyType: KeyType.Ed25519 }],
+  });
+  console.log(`Created did '${indyDID}' for ${issuer.config.label}`);
+  return indyDID;
+};

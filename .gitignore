@@ -16,3 +16,4 @@ holder/data
 node_modules
 dist
 .env
+logs

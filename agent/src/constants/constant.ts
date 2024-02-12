@@ -5,6 +5,7 @@ config();
  which agent to define among the various Agent's value in env  */
 export const AGENT_NAME: string = process.env.AGENT_NAME!;
 export const AGENT_TYPE: string = process.env.AGENT_TYPE!;
+export const AGENT_ENV: string = process.env.AGENT_ENV!;
 
 export const LABEL: string = process.env[`${AGENT_NAME}LABEL`]!;
 export const WALLET_ID: string = process.env[`${AGENT_NAME}WALLET_ID`]!;
@@ -17,3 +18,4 @@ export const PORT: number = process.env[`${AGENT_NAME}PORT`]
 export const DID_NAMESPACE: string = process.env.DID_NAMESPACE!;
 export const SEED: string = process.env.SEED!;
 export const DID: string = process.env.DID!;
+export const MEDIATOR_URL: string = process.env.MEDIATOR_URL!;

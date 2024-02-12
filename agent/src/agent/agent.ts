@@ -9,6 +9,7 @@ import {
 import { HttpInboundTransport, agentDependencies } from '@aries-framework/node';
 import {
   ENDPOINT,
+  ENV,
   LABEL,
   PORT,
   WALLET_ID,
@@ -23,7 +24,9 @@ const config: InitConfig = {
     id: WALLET_ID,
     key: WALLET_KEY,
   },
-  logger: new ConsoleLogger(LogLevel.info),
+  logger: new ConsoleLogger(
+    ENV === 'development' ? LogLevel.debug : LogLevel.info
+  ),
 };
 
 type AgentModules = typeof agentModules;

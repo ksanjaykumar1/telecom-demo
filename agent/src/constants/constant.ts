@@ -1,6 +1,7 @@
 import { config } from 'dotenv';
 config();
 
+export const ENV: string = process.env.NODE_ENV || 'prod';
 /*AGENT_NAME is used to dynamically pick 
  which agent to define among the various Agent's value in env  */
 export const AGENT_NAME: string = process.env.AGENT_NAME!;

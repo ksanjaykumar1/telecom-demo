@@ -1,5 +1,4 @@
 import { Inject, Module } from '@nestjs/common';
-import { AGENT_TOKEN } from 'src/constants/constant';
 import { ConfigService } from '@nestjs/config';
 import {
   Agent,
@@ -11,6 +10,7 @@ import {
 } from '@aries-framework/core';
 import { HttpInboundTransport, agentDependencies } from '@aries-framework/node';
 import { agentModuleFactory, createAndRegisterIndy } from './agentUtils';
+import { AGENT_MODULES_TOKEN, AGENT_TOKEN } from 'src/constants';
 
 const agentFactory = {
   provide: AGENT_TOKEN,
@@ -58,7 +58,7 @@ const agentFactory = {
 
     return agent;
   },
-  inject: [ConfigService, 'AGENT_MODULES'],
+  inject: [ConfigService, AGENT_MODULES_TOKEN],
 };
 @Module({
   providers: [agentFactory, ConfigService, agentModuleFactory],

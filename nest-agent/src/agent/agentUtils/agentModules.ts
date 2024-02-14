@@ -28,9 +28,10 @@ import {
 import { indyVdr } from '@hyperledger/indy-vdr-nodejs';
 import { ConfigService } from '@nestjs/config';
 import { bcovrinTestNetwork } from './networks';
+import { AGENT_MODULES_TOKEN } from 'src/constants';
 
 export const agentModuleFactory = {
-  provide: 'AGENT_MODULES',
+  provide: AGENT_MODULES_TOKEN,
   useFactory: (configService: ConfigService) => {
     const { environment, mediator_url } = configService.get('agent');
     const mediatorInvitationUrl = environment === 'PUBLIC' ? mediator_url : '';

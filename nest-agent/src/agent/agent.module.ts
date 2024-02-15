@@ -9,8 +9,13 @@ import {
   WsOutboundTransport,
 } from '@aries-framework/core';
 import { HttpInboundTransport, agentDependencies } from '@aries-framework/node';
-import { agentModuleFactory, createAndRegisterIndy } from './agentUtils';
+import {
+  agentModuleFactory,
+  createAndRegisterIndy,
+  createNewInvitation,
+} from './agentUtils';
 import { AGENT_MODULES_TOKEN, AGENT_TOKEN } from 'src/constants';
+import * as qrcode from 'qrcode-terminal';
 
 const agentFactory = {
   provide: AGENT_TOKEN,
@@ -51,6 +56,11 @@ const agentFactory = {
     try {
       await agent.initialize();
       await createAndRegisterIndy(agent, seed, did, did_namespace);
+      const { invitationUrl, outOfBandRecord } = await createNewInvitation(
+        agent,
+        { label: 'Fur Alice' },
+      );
+      qrcode.generate(invitationUrl, { small: true });
     } catch (error) {
       console.log(error);
       process.exit(1);

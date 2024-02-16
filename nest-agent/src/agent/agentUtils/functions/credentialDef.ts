@@ -33,3 +33,14 @@ export const createAndRegisterCredentialDefinition = async (
   return credentialDefinitionResult.credentialDefinitionState
     .credentialDefinitionId!;
 };
+
+export const getCredentialDefinitionById = async (
+  agent: Agent,
+  credentialDefinitionId: string,
+) => {
+  const credentialDefinition =
+    await agent.modules.anoncreds.getCredentialDefinition(
+      credentialDefinitionId,
+    );
+  return credentialDefinition;
+};

@@ -11,9 +11,9 @@ type CredentialSchema = {
 export const createAndRegisterSchema = async (
   issuer: Agent,
   {
-    attrNames = ['name', 'date of birth', 'email', 'occupation'],
+    attrNames,
     issuerId,
-    name = 'SSI Identity',
+    name,
     version = `1.0.${Math.floor(Math.random() * 1000)}`,
   }: CredentialSchema,
 ): Promise<string> => {
@@ -24,9 +24,11 @@ export const createAndRegisterSchema = async (
       name,
       version,
     },
-    options: {},
+    options: {
+      endorserMode: 'internal',
+      endorserDid: issuerId,
+    },
   });
-
   if (schemaResult.schemaState.state === 'failed') {
     throw new Error(`Error creating schema`);
   }

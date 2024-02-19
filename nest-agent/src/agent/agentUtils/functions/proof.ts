@@ -1,11 +1,14 @@
 import { Agent } from '@aries-framework/core';
 import { cyan, log, underscore } from '../../../utils';
+import { ProofRequestDto } from 'src/present-proof/dto/proof-request.dto/proof-request.dto';
 
 export const requestAnoncredsProof = async (
   verifier: Agent,
-  connectionId: string,
-  credentialDefinitionId?: string,
-  requested_attributes?: string[],
+  {
+    connectionId,
+    credentialDefinitionId,
+    requested_attributes,
+  }: ProofRequestDto,
 ) => {
   let names: string[];
   if (requested_attributes?.length === 0) {

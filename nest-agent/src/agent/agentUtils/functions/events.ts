@@ -1,5 +1,8 @@
 import {
   Agent,
+  BasicMessageEventTypes,
+  BasicMessageRole,
+  BasicMessageStateChangedEvent,
   ConnectionEventTypes,
   ConnectionStateChangedEvent,
   CredentialEventTypes,
@@ -12,7 +15,22 @@ import {
   ProofStateChangedEvent,
 } from '@aries-framework/core';
 import { log, underscore, yellow } from '../../../utils';
+import { CustomAgent } from '../agentModules';
 
+export const messageListener = (agent: CustomAgent) => {
+  return new Promise(() => {
+    agent.events.on(
+      BasicMessageEventTypes.BasicMessageStateChanged,
+      (event: BasicMessageStateChangedEvent) => {
+        if (
+          event.payload.basicMessageRecord.role === BasicMessageRole.Receiver
+        ) {
+          log(` Received message:${underscore(event.payload.message.content)}`);
+        }
+      },
+    );
+  });
+};
 export const returnWhenConnected = (
   agent: Agent,
   outOfBandRecordId: string,
@@ -30,20 +48,22 @@ export const returnWhenConnected = (
   });
 };
 
-export const returnWhenCredentialInWallet = (
+export const credentialInWalletListener = (
   agent: Agent,
 ): Promise<CredentialExchangeRecord> => {
-  return new Promise((resolve) => {
+  return new Promise(() => {
     agent.events.on<CredentialStateChangedEvent>(
       CredentialEventTypes.CredentialStateChanged,
-      async ({ payload }) => {
+      ({ payload }) => {
         if (payload.credentialRecord.state === CredentialState.Done) {
-          await log(
+          log(
             `Accepted ${underscore('Anoncreds')} credential for ${yellow(
               agent.config.label,
             )}`,
           );
-          resolve(payload.credentialRecord);
+          console.log(payload.credentialRecord);
+          log(JSON.stringify(payload.credentialRecord));
+          // resolve(payload.credentialRecord);
         }
       },
     );
@@ -88,10 +108,10 @@ export const returnWhenProofShared = (
   });
 };
 
-export const returnWhenProofAccepted = (
+export const proofAcceptedListener = (
   agent: Agent,
 ): Promise<ProofExchangeRecord> => {
-  return new Promise((resolve) => {
+  return new Promise(() => {
     agent.events.on<ProofStateChangedEvent>(
       ProofEventTypes.ProofStateChanged,
       async ({ payload }) => {
@@ -119,8 +139,21 @@ export const returnWhenProofAccepted = (
             });
 
             log('==============Verified successfully==================');
-            resolve(payload.proofRecord);
+            // resolve(payload.proofRecord);
           }
+        }
+      },
+    );
+  });
+};
+
+export const proofRequestListener = (agent: CustomAgent) => {
+  return new Promise(() => {
+    agent.events.on(
+      ProofEventTypes.ProofStateChanged,
+      ({ payload }: ProofStateChangedEvent) => {
+        if (payload.proofRecord.state === ProofState.RequestReceived) {
+          log(JSON.stringify(payload.proofRecord));
         }
       },
     );

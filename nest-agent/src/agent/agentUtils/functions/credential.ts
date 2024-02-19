@@ -1,11 +1,10 @@
 import { Agent } from '@aries-framework/core';
 import { cyan, log, underscore } from '../../../utils';
+import { IssueCredentialDto } from 'src/issue-credential/dto/issue-credential.dto/issue-credential.dto';
 
 export const offerAnoncredsCredential = async (
   issuer: Agent,
-  connectionId: string,
-  credentialDefinitionId: string,
-  attributes?: any,
+  { attributes, credentialDefinitionId, connectionId }: IssueCredentialDto,
 ) => {
   const dob = new Date();
   dob.setFullYear(new Date().getFullYear() - 25);

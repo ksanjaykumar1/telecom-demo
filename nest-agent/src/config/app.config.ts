@@ -17,5 +17,6 @@ export default () => ({
     seed: process.env.SEED,
     mediator_url: process.env.MEDIATOR_URL,
     did_namespace: process.env.DID_NAMESPACE,
+    did_with_namespace: process.env.DID_NAMESPACE + process.env.DID,
   },
 });

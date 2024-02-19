@@ -1,10 +1,9 @@
-import { Module } from '@nestjs/common';
+import { Inject, Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AgentModule } from './agent/agent.module';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ConnectionsModule } from './connections/connections.module';
-import { CredentialDefinitionController } from './credential-definition/credential-definition.controller';
 import { CredentialDefinitionModule } from './credential-definition/credential-definition.module';
 import { CredentialModule } from './credential/credential.module';
 import { CredentialsModule } from './credentials/credentials.module';
@@ -15,7 +14,12 @@ import { PresentProofModule } from './present-proof/present-proof.module';
 import { RevocationModule } from './revocation/revocation.module';
 import { SchemaModule } from './schema/schema.module';
 import { WalletModule } from './wallet/wallet.module';
+import { ListenerModule } from './listener/listener.module';
+
 import appConfig from './config/app.config';
+import { AGENT_TOKEN } from './constants';
+import { CustomAgent } from './agent/agentUtils';
+import { ListenerService } from './listener/listener.service';
 
 @Module({
   imports: [
@@ -34,8 +38,25 @@ import appConfig from './config/app.config';
     RevocationModule,
     SchemaModule,
     WalletModule,
+    ListenerModule,
   ],
-  controllers: [AppController, CredentialDefinitionController],
+  controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule {
+  constructor(
+    @Inject(AGENT_TOKEN) private agent: CustomAgent,
+    private readonly listenerService: ListenerService,
+    private readonly configService: ConfigService,
+  ) {
+    this.listenerService.messageListener();
+    const agentType: string = this.configService.get('agent.type');
+    if (agentType === 'holder') {
+      this.listenerService.credentialListener();
+      this.listenerService.ProofRequestReceivedListener();
+    } else if (agentType === 'verifier') {
+      this.listenerService.ProofRequestVerifiedListener();
+    } else if (agentType === 'issuer') {
+    }
+  }
+}

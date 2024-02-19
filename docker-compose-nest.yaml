@@ -1,0 +1,57 @@
+version: '3.7'
+
+services:
+  issuer-agent:
+    container_name: issuer-agent
+    image: nest-agent
+    build:
+      context: ./nest-agent
+    env_file: ./nest-agent/.env
+    restart: always
+    environment:
+      - AGENT_ENV=PUBLIC
+    ports:
+      - 3000:3000
+    volumes:
+      - issuerData:/root/.afj
+      # - node_modules:/app/node_modules
+
+  holder-agent:
+    container_name: holder-agent
+    image: nest-agent
+    build:
+      context: ./nest-agent
+    env_file: ./nest-agent/.env
+    environment:
+      - AGENT_ENV=PUBLIC
+      - AGENT_TYPE=holder
+      - AGENT_NAME=HOLDER_
+    ports:
+      - 4000:3000
+    volumes:
+      - holderData:/root/.afj
+      # - node_modules:/app/node_modules
+
+  verifier-agent:
+    container_name: verifier-agent
+    image: nest-agent
+    build:
+      context: ./nest-agent
+    env_file: ./nest-agent/.env
+    environment:
+      - AGENT_ENV=PUBLIC
+      - AGENT_TYPE=verifier
+      - AGENT_NAME=VERIFIER_
+    ports:
+      - 5000:3000
+    volumes:
+      - verifierData:/root/.afj
+      # - node_modules:/app/node_modules
+
+volumes:
+  issuerData:
+  holderData:
+  verifierData:
+
+  # node_modulesV:
+  # node_modulesH:

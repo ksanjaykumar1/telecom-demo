@@ -1,6 +1,7 @@
-import { Agent } from '@aries-framework/core';
+import { Agent, CredentialExchangeRecord } from '@aries-framework/core';
 import { cyan, log, underscore } from '../../../utils';
 import { IssueCredentialDto } from 'src/issue-credential/dto/issue-credential.dto/issue-credential.dto';
+import { CustomAgent } from '../agentModules';
 
 export const offerAnoncredsCredential = async (
   issuer: Agent,
@@ -36,4 +37,15 @@ export const offerAnoncredsCredential = async (
       issuer.config.label,
     )} -> ${underscore(connectionId)}`,
   );
+};
+
+export const getAllCredentials = (agent: CustomAgent) => {
+  return agent.credentials.getAll();
+};
+
+export const getCredentialById = (
+  agent: CustomAgent,
+  credentialRecordId: string,
+): Promise<CredentialExchangeRecord> => {
+  return agent.credentials.getById(credentialRecordId);
 };

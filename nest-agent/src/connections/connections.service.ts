@@ -6,10 +6,14 @@ import { createNewInvitation } from 'src/agent/agentUtils';
 import { CreateInvitationDto } from './dto/create-invitation.dto/create-invitation.dto';
 import { SendMessageDto } from './dto/send-message.dto/send-message.dto';
 import { ReceiveInvitationDto } from './dto/receive-invitation.dto/receive-invitation.dto';
+import { ListenerService } from 'src/listener/listener.service';
 
 @Injectable()
 export class ConnectionsService {
-  constructor(@Inject(AGENT_TOKEN) private agent: Agent) {}
+  constructor(
+    @Inject(AGENT_TOKEN) private agent: Agent,
+    private readonly listenerService: ListenerService,
+  ) {}
   sendMessage(connectionId: string, { message }: SendMessageDto) {
     return this.agent.basicMessages.sendMessage(connectionId, message);
   }
@@ -24,6 +28,7 @@ export class ConnectionsService {
       createInvitationDto,
     );
     this.generateQrCode(invitationUrl);
+    this.listenerService.connectionListener(outOfBandRecord.id);
     return {
       invitationUrl,
       outOfBandRecord,

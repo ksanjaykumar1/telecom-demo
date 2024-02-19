@@ -58,7 +58,7 @@ const agentFactory = {
       await createAndRegisterIndy(agent, seed, did, did_namespace);
       const { invitationUrl, outOfBandRecord } = await createNewInvitation(
         agent,
-        { label: 'Fur Alice' },
+        {},
       );
       qrcode.generate(invitationUrl, { small: true });
     } catch (error) {

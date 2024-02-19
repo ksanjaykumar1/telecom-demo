@@ -18,8 +18,10 @@ async function bootstrap() {
   );
 
   const config = new DocumentBuilder()
-    .setTitle(process.env.ISSUER_LABEL)
-    .setDescription(`${process.env.ISSUER_LABEL} Swagger UI`)
+    .setTitle(process.env[`${process.env.AGENT_NAME}LABEL`])
+    .setDescription(
+      `${process.env[`${process.env.AGENT_NAME}LABEL`]} Swagger UI`,
+    )
     .setVersion('1.0')
     .build();
   const document = SwaggerModule.createDocument(app, config);

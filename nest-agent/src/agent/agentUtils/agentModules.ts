@@ -1,4 +1,5 @@
 import {
+  Agent,
   AutoAcceptCredential,
   AutoAcceptProof,
   ConnectionsModule,
@@ -30,12 +31,13 @@ import { ConfigService } from '@nestjs/config';
 import { bcovrinTestNetwork } from './networks';
 import { AGENT_MODULES_TOKEN } from 'src/constants';
 
+let agentModules;
 export const agentModuleFactory = {
   provide: AGENT_MODULES_TOKEN,
   useFactory: (configService: ConfigService) => {
     const { environment, mediator_url } = configService.get('agent');
     const mediatorInvitationUrl = environment === 'PUBLIC' ? mediator_url : '';
-    return {
+    agentModules = {
       askar: new AskarModule({ ariesAskar }),
       anoncredsRs: new AnonCredsRsModule({
         anoncreds,
@@ -72,6 +74,10 @@ export const agentModuleFactory = {
         mediatorInvitationUrl: mediatorInvitationUrl,
       }),
     };
+    return agentModules;
   },
   inject: [ConfigService],
 };
+
+type AgentModules = typeof agentModules;
+export type CustomAgent = Agent<AgentModules>;

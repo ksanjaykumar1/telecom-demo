@@ -9,6 +9,10 @@ import morgan from 'morgan';
 import { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import path from 'path';
+import helmet from 'helmet';
+import xss from 'xss-clean';
+import mongoSanitize from 'express-mongo-sanitize';
+
 
 import authRouter from './routes/authRoutes.js';
 // import jobRouter from './routes/jobsRoutes.js';
@@ -28,6 +32,9 @@ app.use(express.static(path.resolve(__dirname, './client/dist')));
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors());
+app.use(helmet());
+app.use(xss());
+app.use(mongoSanitize());
 if (process.env.NODE_ENV !== 'production') {
   app.use(morgan('dev'));
 }
